@@ -3,99 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniFAQ - Trợ lý AI Q&A Tức thì cho sinh viên</title>
-    <meta name="description" content="UniFAQ là trợ lý AI giúp sinh viên trả lời mọi câu hỏi về cuộc sống và học tập tại trường đại học. Nhanh chóng, chính xác, 24/7.">
-    <link rel="stylesheet" href="style.css">
+    <title>UniFAQ - Trợ lý AI Q&A Tức thì cho sinh viên đại học</title>
+    <meta name="description" content="UniFAQ là trợ lý AI giúp sinh viên trả lời mọi câu hỏi về quy tắc, chính sách, lịch học và cuộc sống tại trường đại học. Nhanh chóng, chính xác, 24/7.">
+    <link rel="canonical" href="[Đường dẫn URL chính thức của trang]">
+    
+    <meta property="og:title" content="UniFAQ - Trợ lý AI Q&A Tức thì cho sinh viên">
+    <meta property="og:description" content="Giải đáp mọi vấn đề đại học trong tích tắc. Trợ lý AI được đào tạo chuyên sâu về quy tắc và chính sách của trường bạn.">
+    <meta property="og:image" content="https://www.pinterest.com/pin/top-1001-hnh-nh-p-trn-mng-x-hi-hot-nht-hin-nay--621004236145841612/">
+    <meta property="og:url" content="[Đường dẫn URL chính thức của trang]">
+    <meta property="og:type" content="website">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@unifaq_ai"> <meta name="twitter:creator" content="@unifaq_ai">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800&display=swap&text=UniFAQ%20%E2%9A%A1%EF%B8%8FABCDEGHIJKLMNOPQRSTUVWXYZa%C3%A1%C3%A0%C3%A3%C3%A1%C3%AD%C3%AC%E2%80%A6" rel="stylesheet" as="style">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header class="header">
         <div class="header__container container">
-            <a href="#" class="header__logo">UniFAQ ⚡️</a>
-            <nav class="header__nav nav">
+            <a href="/" class="header__logo" aria-label="UniFAQ, trở về trang chủ">UniFAQ ⚡️</a>
+            <nav class="header__nav nav" aria-label="Điều hướng chính">
                 <a href="#features" class="nav__link">Tính năng</a>
-                <a href="#usage" class="nav__link">Demo</a>
-                <a href="#cta-bottom" class="button button--nav">Bắt đầu</a>
+                <a href="#testimonials" class="nav__link">Đánh giá</a>
+                <a href="#deployment" class="nav__link">Triển khai</a>
+                <a href="#cta-bottom" class="button button--nav" role="button">Bắt đầu</a>
             </nav>
         </div>
     </header>
 
-    <main class="main">
-        <section class="hero section section--navy">
+    <main id="main-content">
+        <section class="hero section section--navy" aria-labelledby="hero-title">
             <div class="hero__container container">
                 <div class="hero__content">
-                    <h1 class="hero__title">Giải Đáp Mọi Vấn Đề Đại Học <span class="hero__title-highlight">Trong Tích Tắc.</span></h1>
+                    <h1 id="hero-title" class="hero__title">Giải Đáp Mọi Vấn Đề Đại Học <span class="hero__title-highlight">Trong Tích Tắc.</span></h1>
                     <p class="hero__description">
                         UniFAQ là trợ lý AI được đào tạo chuyên sâu về quy tắc, chính sách và lịch học của trường bạn. Đừng lãng phí thời gian tìm kiếm nữa.
                     </p>
                     <a href="#cta-bottom" class="button button--primary hero__cta">Dùng Thử AI Ngay</a>
-                    <p class="hero__note">Không cần thẻ tín dụng. Cài đặt trong 2 phút.</p>
+                    <p class="hero__note"><small>Không cần thẻ tín dụng. Cài đặt trong 2 phút.</small></p>
                 </div>
                 
                 <div class="hero__image-wrapper">
                     <img 
                         src="https://picsum.photos/seed/unifaq-hero-v3/600/400" 
-                        alt="Minh họa sinh viên hỏi đáp bằng AI" 
-                        class="hero__image">
+                        alt="Minh họa một sinh viên đang sử dụng ứng dụng hỏi đáp AI trên điện thoại hoặc máy tính bảng để tìm thông tin nhanh chóng." 
+                        class="hero__image"
+                        loading="eager" 
+                        width="600"
+                        height="400">
                 </div>
             </div>
         </section>
-
-        <section id="features" class="features section">
+        
+        <section id="features" class="features section" aria-labelledby="features-title">
             <div class="features__container container">
-                <h2 class="section__title">Sức Mạnh Của UniFAQ</h2>
-                <div class="features__grid">
-                    <div class="feature-card feature-card--bold">
+                <h2 id="features-title" class="section__title">Sức Mạnh Của UniFAQ</h2>
+                <ul class="features__grid" role="list">
+                    <li class="feature-card feature-card--bold">
                         <h3 class="feature-card__title">24/7 Availability</h3>
                         <p class="feature-card__description">Hỏi bất cứ lúc nào, UniFAQ không bao giờ ngủ. Lý tưởng cho các cú đêm học bài.</p>
-                    </div>
-                    <div class="feature-card feature-card--bold">
+                    </li>
+                    <li class="feature-card feature-card--bold">
                         <h3 class="feature-card__title">Contextual Accuracy</h3>
                         <p class="feature-card__description">Công nghệ AI hiểu rõ ngữ cảnh, đưa ra câu trả lời chính xác, không phải là kết quả tìm kiếm chung chung.</p>
-                    </div>
-                    <div class="feature-card feature-card--bold">
+                    </li>
+                    <li class="feature-card feature-card--bold">
                         <h3 class="feature-card__title">Multilingual Support</h3>
                         <p class="feature-card__description">Hỗ trợ nhiều ngôn ngữ, giúp sinh viên quốc tế hoặc các khoa ngoại ngữ dễ dàng tiếp cận.</p>
-                    </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials section section--light-gray" aria-labelledby="testimonials-title">
+            <div class="testimonials__container container">
+                <h2 id="testimonials-title" class="section__title">Sinh viên nói gì về UniFAQ</h2>
+                <div class="testimonial__grid">
+                    <figure class="testimonial-card">
+                        <blockquote>
+                            <p class="testimonial-card__quote">"Trước đây tôi mất 30 phút để tìm một chính sách học vụ trên website. Giờ chỉ mất 3 giây. UniFAQ là cứu cánh."</p>
+                        </blockquote>
+                        <figcaption class="testimonial-card__author">
+                            <span class="author__name">Nguyễn Văn A</span>
+                            <span class="author__details">Sinh viên K20, Ngành Quản trị Kinh doanh</span>
+                        </figcaption>
+                    </figure>
+                    <figure class="testimonial-card">
+                        <blockquote>
+                            <p class="testimonial-card__quote">"Nó không chỉ trả lời mà còn dẫn nguồn chính xác từ các tài liệu của trường. Độ tin cậy cao hơn bất kỳ chatbot nào tôi từng dùng."</p>
+                        </blockquote>
+                        <figcaption class="testimonial-card__author">
+                            <span class="author__name">Lê Thị B</span>
+                            <span class="author__details">Chủ tịch Hội Sinh viên</span>
+                        </figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
 
-        <section id="usage" class="usage section section--navy">
+        <section id="usage" class="usage section section--navy" aria-labelledby="usage-title">
             <div class="usage__container container">
-                <h2 class="section__title section__title--light">Xem UniFAQ Hoạt Động Như Thế Nào</h2>
+                <h2 id="usage-title" class="section__title section__title--light">Xem UniFAQ Hoạt Động Như Thế Nào</h2>
                 
                 <div class="usage__example-wrapper">
                     
                     <div class="usage__text">
                         <h3 class="usage__subtitle">Giao diện Q&A Đơn giản</h3>
-                        <div class="usage__step usage-qa">
+                        <div class="usage__step usage-qa" role="article" aria-label="Ví dụ Hỏi và Đáp 1">
                             <p class="usage-qa__question">❓ Hạn chót nộp đề tài Khoa học máy tính là khi nào?</p>
-                            <p class="usage-qa__answer">✅ Theo thông báo mới nhất (20/09), hạn chót là **23:59 ngày 15/11/2025**. Vui lòng kiểm tra email của thầy Sơn để biết thêm chi tiết về định dạng.</p>
+                            <p class="usage-qa__answer">✅ Theo thông báo mới nhất (20/09), hạn chót là **23:59 ngày <time datetime="2025-11-15">15/11/2025</time>**. Vui lòng kiểm tra email của thầy Sơn để biết thêm chi tiết về định dạng.</p>
                         </div>
-                         <div class="usage__step usage-qa">
+                         <div class="usage__step usage-qa" role="article" aria-label="Ví dụ Hỏi và Đáp 2">
                             <p class="usage-qa__question">❓ Tôi có thể đăng ký câu lạc bộ Robotics ở đâu?</p>
-                            <p class="usage-qa__answer">✅ Câu lạc bộ Robotics có văn phòng tại tầng 3, tòa nhà A. Thời gian đăng ký trực tiếp: 10:00 - 15:00 hàng ngày. (Nguồn: Website Đoàn trường).</p>
+                            <p class="usage-qa__answer">✅ Câu lạc bộ Robotics có văn phòng tại tầng 3, tòa nhà A. Thời gian đăng ký trực tiếp: <time datetime="10:00">10:00</time> - <time datetime="15:00">15:00</time> hàng ngày. (Nguồn: Website Đoàn trường).</p>
                         </div>
                     </div>
 
                     <div class="usage__mockup-container">
                         <img 
                             src="https://picsum.photos/seed/unifaq-usage-v3/700/500" 
-                            alt="Giao diện tìm kiếm UniFAQ" 
-                            class="usage__mockup-image">
+                            alt="Màn hình giao diện mô phỏng của UniFAQ hiển thị hộp thoại chat với câu hỏi và câu trả lời tức thì." 
+                            class="usage__mockup-image"
+                            loading="lazy" 
+                            width="700"
+                            height="500">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="cta-bottom" class="cta-section section">
+        <section id="deployment" class="deployment section" aria-labelledby="deployment-title">
+            <div class="deployment__container container">
+                <h2 id="deployment-title" class="section__title">Triển Khai Linh Hoạt cho Mọi Trường</h2>
+                <div class="deployment__content">
+                    <p class="deployment__description">
+                        UniFAQ không chỉ là một chatbot, nó là một giải pháp tích hợp. Chúng tôi xử lý việc quét (crawling) và đào tạo AI trên dữ liệu **quy tắc, FAQ, thông báo, và tài liệu nội bộ** của trường bạn.
+                    </p>
+                    <ul class="deployment__features-list" role="list">
+                        <li>🔌 Tích hợp với Website/LMS hiện tại (iFrame, Widget).</li>
+                        <li>🔒 Bảo mật dữ liệu & Tuân thủ theo quy định của Bộ Giáo dục.</li>
+                        <li>⏱️ Cài đặt nhanh chóng chỉ trong **48 giờ**.</li>
+                    </ul>
+                    <a href="#cta-bottom" class="button button--secondary deployment__cta">Yêu cầu Demo Tùy chỉnh</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta-bottom" class="cta-section section" aria-labelledby="cta-title">
             <div class="cta-section__container container">
-                <h2 class="cta-section__title">Đã đến lúc tạm biệt sự nhầm lẫn và chậm trễ.</h2>
-                <a href="#" class="button button--primary cta-section__cta">Tham gia cộng đồng thông minh ngay!</a>
+                <h2 id="cta-title" class="cta-section__title">Đã đến lúc tạm biệt sự nhầm lẫn và chậm trễ.</h2>
+                <a href="#" class="button button--primary cta-section__cta" role="button">Tham gia cộng đồng thông minh ngay!</a>
             </div>
         </section>
     </main>
@@ -103,6 +164,11 @@
     <footer class="footer">
         <div class="footer__container container">
             <p class="footer__copyright">&copy; 2025 UniFAQ. Sức mạnh AI cho giáo dục đại học.</p>
+            <nav class="footer__links" aria-label="Các liên kết pháp lý và hỗ trợ">
+                <a href="/privacy" class="footer__link">Chính sách Bảo mật</a>
+                <a href="/terms" class="footer__link">Điều khoản Dịch vụ</a>
+                <a href="/contact" class="footer__link">Liên hệ Hỗ trợ</a>
+            </nav>
         </div>
     </footer>
 
