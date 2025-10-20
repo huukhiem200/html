@@ -13,5 +13,95 @@
     "id": 3,
     "question": "Quy trình xin nghỉ học tạm thời (bảo lưu) như thế nào?",
     "answer": "Nộp đơn (theo mẫu) và các minh chứng cần thiết tại Văn phòng Khoa, sau đó Phòng Công tác Sinh viên sẽ phê duyệt. Hạn chót nộp đơn là 3 tuần trước khi học kỳ mới bắt đầu."
+  },
+  {
+    "id": 4,
+    "question": "Phí gửi xe hàng tháng tại ký túc xá là bao nhiêu?",
+    "answer": "Phí gửi xe máy hàng tháng là **50.000 VNĐ**. Sinh viên cần đăng ký tại văn phòng Ban quản lý Ký túc xá trước ngày 5 hàng tháng."
+  },
+  {
+    "id": 5,
+    "question": "Thư viện mở cửa vào những giờ nào?",
+    "answer": "Thư viện trung tâm mở cửa từ **7:30 sáng đến 9:00 tối** các ngày trong tuần, và từ **8:00 sáng đến 5:00 chiều** vào cuối tuần."
+  },
+  {
+    "id": 6,
+    "question": "Làm thế nào để kết nối vào mạng Wi-Fi của trường?",
+    "answer": "Bạn cần kết nối vào mạng Wi-Fi có tên 'Uni-WIFI'. Sử dụng mã số sinh viên làm tên đăng nhập và mật khẩu mặc định là ngày sinh của bạn theo định dạng ddmmyyyy."
+  },
+  {
+    "id": 7,
+    "question": "Thủ tục chuyển ngành hoặc chuyển chuyên ngành là gì?",
+    "answer": "Sinh viên cần có điểm trung bình tích lũy tối thiểu 2.5 và nộp đơn tại Phòng Đào tạo trong khoảng thời gian quy định của học kỳ hè (trước ngày 15/06). Yêu cầu phải được Khoa/Bộ môn mới chấp thuận."
+  },
+  {
+    "id": 8,
+    "question": "Làm lại thẻ sinh viên bị mất hoặc hư hỏng ở đâu?",
+    "answer": "Nộp đơn báo mất tại Công an Phường, sau đó mang giấy xác nhận và 20.000 VNĐ lệ phí đến Phòng Công tác Sinh viên để làm lại thẻ. Thời gian cấp lại là 5 ngày làm việc."
+  },
+  {
+    "id": 9,
+    "question": "Quy định về nghỉ học (vắng mặt) có bị tính điểm danh không?",
+    "answer": "Sinh viên không được phép vắng mặt quá 20% tổng số tiết học của một học phần. Vượt quá giới hạn này sẽ bị cấm thi cuối kỳ. Trường hợp bất khả kháng phải nộp đơn xin phép và minh chứng y tế."
+  },
+  {
+    "id": 10,
+    "question": "Lịch đăng ký hoạt động câu lạc bộ mới (Club Fair) khi nào?",
+    "answer": "Tuần lễ đăng ký Câu lạc bộ (Club Fair) được tổ chức vào tuần thứ 3 của mỗi học kỳ chính. Vui lòng theo dõi thông báo chính thức trên trang Facebook của Đoàn trường."
+  },
+  {
+    "id": 11,
+    "question": "Hệ thống điểm chữ (A, B, C) tương đương với thang điểm 10 như thế nào?",
+    "answer": "Điểm A tương đương 8.5 - 10.0; Điểm B tương đương 7.0 - 8.4; Điểm C tương đương 5.5 - 6.9; Điểm D tương đương 4.0 - 5.4. Dưới 4.0 là điểm F (trượt)."
+  },
+  {
+    "id": 12,
+    "question": "Điều kiện để nhận học bổng khuyến khích học tập là gì?",
+    "answer": "Để nhận học bổng khuyến khích học tập, sinh viên cần đạt điểm trung bình học tập từ **3.2/4.0** trở lên và điểm rèn luyện từ **90/100** trở lên (Loại Tốt)."
+  },
+  {
+    "id": 13,
+    "question": "Thời gian đăng ký môn học cho học kỳ tới là khi nào?",
+    "answer": "Thời gian đăng ký môn học thường diễn ra vào **tuần thứ 12 và 13** của học kỳ hiện tại. Sinh viên cần kiểm tra kỹ email và cổng thông tin sinh viên để biết ngày giờ chính xác."
+  },
+  {
+    "id": 14,
+    "question": "Làm thế nào để xem điểm chi tiết của từng bài kiểm tra?",
+    "answer": "Bạn có thể xem điểm chi tiết bằng cách đăng nhập vào hệ thống quản lý học tập (**LMS**) và truy cập mục 'Bảng điểm' của học phần tương ứng."
+  },
+  {
+    "id": 15,
+    "question": "Tôi có thể thuê phòng học nhóm ở đâu?",
+    "answer": "Phòng học nhóm (Study Rooms) được đặt tại tầng 4 Thư viện Trung tâm. Bạn cần đặt trước qua ứng dụng **Uni-Booking** hoặc tại quầy lễ tân Thư viện."
+  },
+  {
+    "id": 16,
+    "question": "Địa chỉ email chính thức của Phòng Công tác Sinh viên là gì?",
+    "answer": "Địa chỉ email chính thức để liên hệ với Phòng Công tác Sinh viên là **p.ctsv@unimail.edu.vn**."
+  },
+  {
+    "id": 17,
+    "question": "Quy định về việc trả nợ môn học (học lại) như thế nào?",
+    "answer": "Sinh viên có môn học điểm F phải đăng ký học lại vào các học kỳ phụ hoặc học kỳ chính tiếp theo khi học phần đó được mở. Học phí sẽ được tính lại theo số tín chỉ của học phần đó."
+  },
+  {
+    "id": 18,
+    "question": "Mẫu đơn xin xác nhận sinh viên ở đâu?",
+    "answer": "Mẫu đơn xin xác nhận sinh viên (dùng cho vay vốn, làm visa...) có thể tải trực tiếp từ cổng thông tin sinh viên (**Portal**) trong mục 'Tài liệu & Biểu mẫu'."
+  },
+  {
+    "id": 19,
+    "question": "Thời hạn đóng học phí cho học kỳ mới là khi nào?",
+    "answer": "Hạn chót đóng học phí là **ngày 10 của tháng đầu tiên** của mỗi học kỳ. Quá thời hạn có thể bị phạt hoặc bị khóa tài khoản đăng ký môn học."
+  },
+  {
+    "id": 20,
+    "question": "Thời gian thực tập bắt buộc của sinh viên năm cuối là bao lâu?",
+    "answer": "Thời gian thực tập bắt buộc đối với sinh viên năm cuối là **10 tuần (2.5 tháng)**. Sinh viên cần tìm và đăng ký địa điểm thực tập theo hướng dẫn của Khoa chuyên môn."
+  },
+  {
+    "id": 21,
+    "question": "Tôi có thể liên hệ hỗ trợ kỹ thuật (IT Support) ở đâu?",
+    "answer": "Bộ phận Hỗ trợ Kỹ thuật nằm ở Tầng trệt tòa nhà B (Campus chính). Hoặc bạn có thể gọi hotline **(028) 3835 1234** (máy lẻ 200)."
   }
 ]
