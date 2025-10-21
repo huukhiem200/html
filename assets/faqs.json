@@ -103,5 +103,80 @@
     "id": 21,
     "question": "Tôi có thể liên hệ hỗ trợ kỹ thuật (IT Support) ở đâu?",
     "answer": "Bộ phận Hỗ trợ Kỹ thuật nằm ở Tầng trệt tòa nhà B (Campus chính). Hoặc bạn có thể gọi hotline **(028) 3835 1234** (máy lẻ 200)."
+  },
+  {
+    "id": 22,
+    "question": "Lịch nhận bằng và lễ tốt nghiệp khóa cũ là khi nào?",
+    "answer": "Lễ tốt nghiệp và trao bằng thường diễn ra vào **tuần đầu tiên của tháng 10**. Sinh viên phải hoàn tất tất cả các thủ tục và nghĩa vụ học phí trước 1 tháng."
+  },
+  {
+    "id": 23,
+    "question": "Làm thế nào để xin nghỉ học vì lý do sức khỏe?",
+    "answer": "Sinh viên phải nộp đơn xin nghỉ và kèm theo giấy chứng nhận y tế từ bệnh viện cấp huyện trở lên cho Phòng Công tác Sinh viên trong vòng 7 ngày kể từ ngày nghỉ."
+  },
+  {
+    "id": 24,
+    "question": "Thời gian tối đa để hoàn thành chương trình học (thời gian lưu trú tối đa) là bao lâu?",
+    "answer": "Thời gian lưu trú tối đa (bao gồm cả thời gian bảo lưu) là **150%** thời gian chuẩn của khóa học. Ví dụ, khóa 4 năm có thời gian tối đa là 6 năm."
+  },
+  {
+    "id": 25,
+    "question": "Tôi có thể đăng ký khóa học tiếng Anh tăng cường (cải thiện) ở đâu?",
+    "answer": "Các khóa học tiếng Anh tăng cường thường được mở vào học kỳ phụ (hè). Đăng ký qua cổng thông tin sinh viên tại mục **'Đăng ký cải thiện điểm'**."
+  },
+  {
+    "id": 26,
+    "question": "Địa chỉ phòng tư vấn tâm lý học đường là gì?",
+    "answer": "Phòng Tư vấn Tâm lý Sinh viên nằm ở tầng 2 Tòa nhà Hành chính (Admin Building), phòng số 203. Dịch vụ là hoàn toàn miễn phí và bảo mật."
+  },
+  {
+    "id": 27,
+    "question": "Làm thế nào để đổi mật khẩu hệ thống (Portal/LMS)?",
+    "answer": "Bạn có thể đổi mật khẩu qua trang **'Quên mật khẩu'** trên cổng Portal chính. Nếu không thành công, liên hệ Phòng Hỗ trợ Kỹ thuật (IT Support) để được đặt lại."
+  },
+  {
+    "id": 28,
+    "question": "Tôi cần phải làm gì khi muốn đăng ký học cùng lúc hai chuyên ngành (chương trình song bằng)?",
+    "answer": "Đăng ký tại Phòng Đào tạo (Academic Office) và cần đạt GPA tích lũy tối thiểu **3.0** sau học kỳ thứ 2, đồng thời hoàn thành đủ 30 tín chỉ của ngành thứ nhất."
+  },
+  {
+    "id": 29,
+    "question": "Quy định về bảo hiểm y tế bắt buộc cho sinh viên là gì?",
+    "answer": "Tất cả sinh viên đều phải tham gia bảo hiểm y tế bắt buộc. Khoản phí này được thu cùng với học phí đầu mỗi năm học và được quản lý bởi Phòng Kế hoạch Tài chính."
+  },
+  {
+    "id": 30,
+    "question": "Sinh viên có thể sử dụng phòng tập gym của trường miễn phí không?",
+    "answer": "Phòng tập Gym và Hồ bơi được miễn phí sử dụng cho tất cả sinh viên đang theo học. Cần xuất trình thẻ sinh viên tại quầy kiểm soát vào cửa."
+  },
+  {
+    "id": 31,
+    "question": "Tôi có thể xin xác nhận bảng điểm (transcript) ở đâu?",
+    "answer": "Bảng điểm chính thức được cấp tại Phòng Đào tạo (Academic Office) sau khi bạn hoàn thành 'Đơn xin cấp bảng điểm' và thanh toán lệ phí (5.000 VNĐ/bản)."
+  },
+  {
+    "id": 32,
+    "question": "Chính sách về việc cấm thi (bị đình chỉ học) là gì?",
+    "answer": "Sinh viên sẽ bị cấm thi cuối kỳ nếu: 1) Vắng mặt quá 20% số tiết; 2) Vi phạm quy chế thi. Đình chỉ học thường áp dụng nếu GPA tích lũy dưới 1.0 trong hai học kỳ liên tiếp."
+  },
+  {
+    "id": 33,
+    "question": "Làm thế nào để đăng ký tham gia đội tuyển thể thao của trường?",
+    "answer": "Liên hệ trực tiếp với Phòng Công tác Sinh viên hoặc Bộ môn Giáo dục Thể chất để đăng ký và tham gia các buổi kiểm tra năng khiếu."
+  },
+  {
+    "id": 34,
+    "question": "Địa chỉ email của Phòng Kế hoạch Tài chính là gì?",
+    "answer": "Địa chỉ email chính thức để giải quyết các vấn đề học phí và tài chính là **finance@unimail.edu.vn**."
+  },
+  {
+    "id": 35,
+    "question": "Thời gian thi lại và thi cải thiện điểm môn học là khi nào?",
+    "answer": "Thời gian thi lại và cải thiện điểm thường được tổ chức vào khoảng **3 tuần sau khi công bố điểm chính thức** của học kỳ đó. Lịch cụ thể sẽ được thông báo trên Portal."
+  },
+  {
+    "id": 36,
+    "question": "Tôi có thể làm thẻ thư viện mới ở đâu?",
+    "answer": "Bạn có thể đăng ký làm thẻ thư viện mới hoặc làm lại thẻ bị mất tại quầy lễ tân tầng trệt của Thư viện Trung tâm."
   }
 ]
