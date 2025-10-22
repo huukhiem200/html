@@ -1,4 +1,4 @@
-// chatApp.js (Phiên bản Hoàn Chỉnh: Search-to-Chat + Bong bóng nổi)
+// chatApp.js (Phiên bản Hoàn Chỉnh: Đã kích hoạt Gemini)
 
 import { ChatHeader } from './components/ChatHeader.js';
 import { InputBar } from './components/InputBar.js';
@@ -6,6 +6,8 @@ import { MessageList } from './components/MessageList.js';
 import { SuggestionList } from './components/SuggestionList.js';
 import { findTopFaqs } from './hooks/useFaqSearch.js';
 
+// --- CONFIGURATION & STATE ---
+const GEMINI_API_KEY = 'AIzaSyCYZOtTycH6N5lOG63r7RZrpBrpDRtZCVo'; // KEY MỚI CỦA BẠN
 const DATA_FILE = './assets/faqs.json';
 let messages = [];
 let allFaqs = [];
@@ -15,7 +17,9 @@ const chatContainer = document.getElementById('chat-container');
 let displayArea = null; 
 let chatInput = null;
 
-// Hàm render chính, quyết định hiển thị Gợi ý hay Cuộc hội thoại
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Hàm render chính
 function render() {
     if (!displayArea) return;
     if (isShowingSuggestions) {
@@ -28,11 +32,24 @@ function render() {
         displayArea.scrollTop = displayArea.scrollHeight;
     }
 }
+function renderLayout() {
+    if (!chatContainer) return;
+    chatContainer.innerHTML = `${ChatHeader()}<div class="message-list" id="display-area"></div>${InputBar()}`;
+    updateMessages();
+    setupEventListeners();
+}
+function updateMessages() {
+    const messageListContainer = document.getElementById('display-area');
+    if (!messageListContainer) return;
+    messageListContainer.innerHTML = MessageList(messages);
+    messageListContainer.scrollTop = messageListContainer.scrollHeight;
+}
 
-// Khi người dùng gõ, luôn hiển thị gợi ý
+
+// Khi người dùng gõ, quay lại chế độ gợi ý
 function handleChatInput() {
     if (!isShowingSuggestions) {
-        messages = []; // Xóa lịch sử chat cũ khi người dùng bắt đầu gõ lại
+        messages = [];
         isShowingSuggestions = true;
     }
     render();
@@ -49,23 +66,75 @@ function handleSuggestionClick(event) {
 
 // Khi nhấn Enter hoặc nút Gửi
 function handleFormSubmit(event) {
-    event.preventDefault();
-    if (!chatInput) return;
-    const userText = chatInput.value.trim();
+    event.preventDefault(); 
+    const input = document.getElementById('chat-input');
+    const userText = input.value.trim();
     if (userText) {
         startConversation(userText);
     }
 }
 
-// Hàm xử lý chung cho việc bắt đầu cuộc hội thoại
-function startConversation(userText) {
-    const botReply = findAnswer(userText) || "Xin lỗi, tôi chưa có thông tin về câu hỏi này. Bạn có thể thử một từ khóa khác.";
-    messages.push({ sender: 'user', text: userText });
-    messages.push({ sender: 'bot', text: botReply });
-    isShowingSuggestions = false;
-    if (chatInput) chatInput.value = '';
-    render();
+// --- LOGIC GỌI AI VÀ XỬ LÝ HỘI THOẠI ---
+
+async function getGeminiAnswer(question) {
+    const MODEL_NAME = 'gemini-2.5-flash';
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`;
+
+    const systemInstruction = "Bạn là UniFAQ, một trợ lý AI thân thiện. Hãy trả lời câu hỏi bằng tiếng Việt ngắn gọn.";
+    const requestBody = {
+        contents: [{ parts: [{ text: systemInstruction + " Câu hỏi: " + question }] }],
+        generationConfig: { maxOutputTokens: 500, temperature: 0.7 }
+    };
+    try {
+        const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) });
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("API Error Response:", errorData);
+            return `Lỗi kết nối AI: ${errorData.error.message || 'Không thể xử lý yêu cầu.'}`;
+        }
+        const data = await response.json();
+        if (!data.candidates || data.candidates.length === 0) {
+            return "Rất tiếc, câu hỏi này bị AI từ chối trả lời.";
+        }
+        return data.candidates[0].content.parts[0].text;
+    } catch (error) {
+        return "Rất tiếc, đã có lỗi mạng hoặc kết nối không ổn định.";
+    }
 }
+
+async function startConversation(userText) {
+    const input = document.getElementById('chat-input');
+    const submitBtn = document.getElementById('chat-submit');
+    
+    if(input) input.disabled = true;
+    if(submitBtn) submitBtn.disabled = true;
+
+    messages.push({ sender: 'user', text: userText });
+    updateMessages();
+    if(input) input.value = '';
+
+    messages.push({ sender: 'bot', isTyping: true, text: '<span></span><span></span><span></span>' });
+    updateMessages();
+    
+    let botReply = findAnswer(userText);
+    
+    if (!botReply) {
+        await sleep(2000);
+        botReply = await getGeminiAnswer(userText);
+    }
+    
+    messages.pop();
+    messages.push({ sender: 'bot', text: botReply });
+    updateMessages();
+
+    if(input) {
+        input.disabled = false;
+        input.focus();
+    }
+    if(submitBtn) submitBtn.disabled = false;
+}
+
+// --- CÁC HÀM CÒN LẠI ---
 
 function setupEventListeners() {
     const chatForm = document.getElementById('chat-form');
@@ -74,6 +143,7 @@ function setupEventListeners() {
     const closeButton = document.getElementById('chat-close-button');
     const minimizeButton = document.getElementById('chat-minimize-button');
     const headerSearchForm = document.getElementById('header-search-form');
+    const suggestionChips = document.querySelectorAll('.suggestion-chip');
 
     if (chatInput) {
         chatInput.addEventListener('input', handleChatInput);
@@ -94,13 +164,12 @@ function setupEventListeners() {
             }
         });
     }
-    const suggestionChips = document.querySelectorAll('.suggestion-chip');
     suggestionChips.forEach(chip => {
         chip.addEventListener('click', () => {
             const question = chip.getAttribute('data-question');
             if (question && chatContainer) {
-                chatContainer.classList.add('is-open'); // Mở cửa sổ chat
-                startConversation(question); // Bắt đầu hội thoại
+                chatContainer.classList.add('is-open');
+                startConversation(question);
             }
         });
     });
@@ -120,11 +189,46 @@ function setupEventListeners() {
         if(closeButton) closeButton.addEventListener('click', closeChat);
         if(minimizeButton) minimizeButton.addEventListener('click', closeChat);
     }
+    if (chatForm) {
+        chatForm.addEventListener('submit', handleFormSubmit);
+    }
 }
 
 function findAnswer(question) {
-    const scoredFaqs = findTopFaqs(question, allFaqs);
-    return scoredFaqs.length > 0 ? scoredFaqs[0].answer : null;
+    const userWords = question.toLowerCase().trim().split(/\s+/);
+    if (userWords.length === 0) return null;
+    let bestMatch = { faq: null, score: 0 };
+
+    allFaqs.forEach(faq => {
+        let currentScore = 0;
+        const questionText = faq.question.toLowerCase();
+        const answerText = faq.answer.toLowerCase();
+
+        userWords.forEach(word => {
+            if (word.length >= 4) { // Chỉ tính điểm cho từ khóa có 4 ký tự trở lên
+                // Ưu tiên khớp trong câu hỏi
+                if (questionText.includes(word)) {
+                    currentScore += 2;
+                }
+                // Ít ưu tiên hơn nếu chỉ khớp trong câu trả lời
+                else if (answerText.includes(word)) {
+                    currentScore += 1;
+                }
+            }
+        });
+
+        if (currentScore > bestMatch.score) {
+            bestMatch = { faq: faq, score: currentScore };
+        }
+    });
+
+    // Nâng ngưỡng điểm lên 4 để tăng độ chính xác
+    if (bestMatch.score > 4) {
+        return bestMatch.faq.answer;
+    }
+    
+    // Trả về null nếu không đạt ngưỡng, để Gemini xử lý
+    return null;
 }
 
 function attachSuggestionListeners() {
@@ -139,16 +243,12 @@ async function main() {
         const response = await fetch(DATA_FILE);
         if (!response.ok) throw new Error('Không thể tải file FAQs.');
         allFaqs = await response.json();
-
-        if (chatContainer) {
-            chatContainer.innerHTML = `${ChatHeader()}<div class="message-list" id="display-area"></div>${InputBar()}`;
-            displayArea = document.getElementById('display-area');
-            render();
-            setupEventListeners();
-        }
+        renderLayout();
     } catch (error) {
         console.error("Initialization Error:", error);
-        if (chatContainer) chatContainer.innerHTML = `<p>Lỗi: Không thể tải dữ liệu.</p>`;
+        if (chatContainer) {
+            chatContainer.innerHTML = `<p>Lỗi: Không thể tải dữ liệu.</p>`;
+        }
     }
 }
 
