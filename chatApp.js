@@ -22,12 +22,23 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // Hàm render chính
 function render() {
     if (!displayArea) return;
-    if (isShowingSuggestions) {
-        const keyword = chatInput ? chatInput.value : '';
+    
+    const keyword = chatInput ? chatInput.value.trim() : '';
+
+    // LỖI: isShowingSuggestions không còn được sử dụng để điều khiển việc hiển thị SuggestionList
+    // Sửa đổi logic: Nếu ô input có văn bản (người dùng đang gõ) và không có tin nhắn chờ phản hồi (isTyping)
+    // HOẶC nếu không có tin nhắn nào được gửi đi (messages.length === 0)
+    // thì ta hiển thị gợi ý.
+    const isTyping = messages.some(msg => msg.isTyping);
+
+    // Kiểm tra xem người dùng đang gõ **hoặc** box đang rỗng
+    if (keyword.length > 0 && !isTyping || messages.length === 0) {
+        // Luôn hiển thị SuggestionList nếu người dùng đang gõ hoặc box rỗng
         const suggestions = findTopFaqs(keyword, allFaqs);
         displayArea.innerHTML = SuggestionList(suggestions, keyword);
         attachSuggestionListeners();
     } else {
+        // Nếu đã có hội thoại và người dùng không gõ gì, hiển thị MessageList
         displayArea.innerHTML = MessageList(messages);
         displayArea.scrollTop = displayArea.scrollHeight;
     }
@@ -35,7 +46,12 @@ function render() {
 function renderLayout() {
     if (!chatContainer) return;
     chatContainer.innerHTML = `${ChatHeader()}<div class="message-list" id="display-area"></div>${InputBar()}`;
-    updateMessages();
+    displayArea = document.getElementById('display-area'); 
+    chatInput = document.getElementById('chat-input'); 
+    
+    // Khởi tạo messages là rỗng để render lần đầu tiên hiển thị SuggestionList
+    messages = []; 
+    render(); 
     setupEventListeners();
 }
 function updateMessages() {
@@ -48,10 +64,7 @@ function updateMessages() {
 
 // Khi người dùng gõ, quay lại chế độ gợi ý
 function handleChatInput() {
-    if (!isShowingSuggestions) {
-        messages = [];
-        isShowingSuggestions = true;
-    }
+    // Không cần điều kiện gì cả, mỗi lần gõ là render lại giao diện
     render();
 }
 
@@ -61,6 +74,7 @@ function handleSuggestionClick(event) {
     if (target) {
         const questionText = target.getAttribute('data-question');
         startConversation(questionText);
+        isShowingSuggestions = false; // Chuyển sang chế độ hội thoại
     }
 }
 
@@ -70,6 +84,8 @@ function handleFormSubmit(event) {
     const input = document.getElementById('chat-input');
     const userText = input.value.trim();
     if (userText) {
+        // Luôn chuyển sang chế độ hội thoại khi gửi câu hỏi
+        isShowingSuggestions = false; 
         startConversation(userText);
     }
 }
@@ -87,18 +103,39 @@ async function getGeminiAnswer(question) {
     };
     try {
         const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) });
+        
         if (!response.ok) {
             const errorData = await response.json();
             console.error("API Error Response:", errorData);
-            return `Lỗi kết nối AI: ${errorData.error.message || 'Không thể xử lý yêu cầu.'}`;
+            
+            // Sửa đổi: Trả về thông báo lỗi chi tiết hơn từ API
+            const httpStatus = response.status;
+            const errorMessage = errorData.error?.message || 'Không thể xử lý yêu cầu.';
+            
+            return `**Lỗi API (HTTP ${httpStatus})**: ${errorMessage}. Vui lòng kiểm tra API Key và giới hạn sử dụng.`;
         }
-        const data = await response.json();
-        if (!data.candidates || data.candidates.length === 0) {
-            return "Rất tiếc, câu hỏi này bị AI từ chối trả lời.";
+        const data = await response.json(); // Hoặc JSON.parse(responseText);
+        if (data.promptFeedback && data.promptFeedback.blockReason) {
+            const reason = data.promptFeedback.blockReason;
+            console.warn("Gemini Response Blocked:", reason);
+            return `Rất tiếc, câu hỏi của bạn đã bị Gemini từ chối trả lời. Lý do: ${reason}`;
         }
+        if (!data || !data.candidates || data.candidates.length === 0 || 
+            !data.candidates[0].content || !data.candidates[0].content.parts || 
+            data.candidates[0].content.parts.length === 0) {
+            
+            // Nếu API trả về 200 OK nhưng không có nội dung hợp lệ
+            console.error("Gemini API returned 200 OK, but lacked candidates:", data);
+            return "Rất tiếc, câu hỏi này bị AI từ chối trả lời hoặc phản hồi không đúng cấu trúc.";
+        }
+        // Lỗi đang xảy ra ở đây vì data.candidates[0] hoặc .content hoặc .parts có thể undefined
         return data.candidates[0].content.parts[0].text;
     } catch (error) {
-        return "Rất tiếc, đã có lỗi mạng hoặc kết nối không ổn định.";
+        // Khối này bắt lỗi mạng hoặc lỗi parse JSON
+        console.error("Network or Parsing Error:", error);
+        
+        // Sửa đổi: Đưa ra thông báo lỗi chung về kết nối
+        return "Rất tiếc, đã có lỗi mạng hoặc kết nối không ổn định. (Check Console để biết thêm chi tiết)";
     }
 }
 
@@ -113,8 +150,9 @@ async function startConversation(userText) {
     updateMessages();
     if(input) input.value = '';
 
+    // Khi bot trả lời, giao diện sẽ ở chế độ MessageList
     messages.push({ sender: 'bot', isTyping: true, text: '<span></span><span></span><span></span>' });
-    updateMessages();
+    updateMessages(); 
     
     let botReply = findAnswer(userText);
     
@@ -132,13 +170,16 @@ async function startConversation(userText) {
         input.focus();
     }
     if(submitBtn) submitBtn.disabled = false;
+    
+    // Sau khi hội thoại kết thúc, nếu input rỗng, nó sẽ quay lại hiển thị MessageList cũ
+    // Nhưng ngay khi người dùng gõ, handleChatInput sẽ gọi render, và SuggestionList sẽ xuất hiện
 }
 
 // --- CÁC HÀM CÒN LẠI ---
 
 function setupEventListeners() {
     const chatForm = document.getElementById('chat-form');
-    chatInput = document.getElementById('chat-input');
+    // chatInput đã được gán trong renderLayout
     const toggleButton = document.getElementById('chat-toggle-button');
     const closeButton = document.getElementById('chat-close-button');
     const minimizeButton = document.getElementById('chat-minimize-button');
@@ -159,6 +200,7 @@ function setupEventListeners() {
             const userText = headerInput.value.trim();
             if (userText && chatContainer) {
                 chatContainer.classList.add('is-open');
+                isShowingSuggestions = false; // Chuyển sang chế độ hội thoại
                 startConversation(userText);
                 headerInput.value = '';
             }
@@ -169,6 +211,7 @@ function setupEventListeners() {
             const question = chip.getAttribute('data-question');
             if (question && chatContainer) {
                 chatContainer.classList.add('is-open');
+                isShowingSuggestions = false; // Chuyển sang chế độ hội thoại
                 startConversation(question);
             }
         });
@@ -182,7 +225,7 @@ function setupEventListeners() {
         const closeChat = () => {
             chatContainer.classList.remove('is-open');
             messages = [];
-            isShowingSuggestions = true;
+            isShowingSuggestions = true; // Đảm bảo quay lại chế độ gợi ý
             if (chatInput) chatInput.value = '';
             render();
         };
