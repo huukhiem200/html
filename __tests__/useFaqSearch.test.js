@@ -41,3 +41,5 @@ describe('findTopFaqs', () => {
     expect(results).toHaveLength(0);
   });
 });
+
+// Đã thêm newline
