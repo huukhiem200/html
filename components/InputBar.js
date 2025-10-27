@@ -1,9 +1,12 @@
-// components/InputBar.js
-export function InputBar() {
-  return `
-    <form class="input-bar" id="chat-form">
-      <input type="text" id="chat-input" placeholder="Nhập câu hỏi của bạn..." autocomplete="off">
-      <button type="submit" id="chat-submit"><i class="fa-solid fa-paper-plane"></i></button>
-    </form>
-  `;
+export function MessageList(messages) {
+  if (!messages || messages.length === 0) {
+    // Trả về rỗng để SuggestionList xử lý
+    return '';
+  }
+  // Sửa lỗi thụt lề từ 4 khoảng trắng sang 2
+  return messages.map((msg) => `
+    <div class="message message--${msg.sender}">
+      ${msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+    </div>
+  `).join('');
 }
