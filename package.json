@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest",
-    "test:ci": "jest --coverage",
+    "test:ci": "jest --coverage --runInBand",
     "lint": "eslint --ext .js ."
   },
   "keywords": [
