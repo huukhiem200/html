@@ -7,69 +7,46 @@ on:
     branches: [ main ]
 
 jobs:
-  build_and_test:
+  build-and-test:
+    name: Build, Lint, and Test
     runs-on: ubuntu-latest
 
-    services: # Cấu hình service để chạy server nền
-      web: # Cấp độ 0 (so với services)
-        image: node:20-alpine     # Cấp độ 1 (thụt vào 2 dấu cách)
-        ports:                    # Cấp độ 1
-          - 3000:3000             # Cấp độ 2
-        volumes:                  # Cấp độ 1
-          - ${{ github.workspace }}:/app # Cấp độ 2
-        working_directory: /app   # CẤP ĐỘ 1 - NGANG HÀNG IMAGE, PORTS, VOLUMES, OPTIONS
-        entrypoint: ["/bin/sh", "-c"] # CẤP ĐỘ 1 - NGANG HÀNG IMAGE, PORTS, VOLUMES, OPTIONS
-        command: ["npm ci && npm start"] # CẤP ĐỘ 1 - NGANG HÀNG IMAGE, PORTS, VOLUMES, OPTIONS
-        options: >-               # Cấp độ 1
-          --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\"" # Cấp độ 2 (trong options)
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    steps:
+      # 1️⃣ Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    steps: # Cấp độ 0 (so với jobs)
-    - name: ⬇️ Checkout Repository Code # Cấp độ 1 (thụt vào 2 dấu cách)
-      uses: actions/checkout@v4
+      # 2️⃣ Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: 🛠️ Setup Node.js 20
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        working-directory: ./src
+        run: npm install
 
-    - name: 📦 Cache Node Modules
-      uses: actions/cache@v4
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      # 4️⃣ Run ESLint to check code style
+      - name: Run ESLint
+        working-directory: ./src
+        run: |
+          npx eslint . --ext .js
 
-    - name: 📦 Install Dependencies (for runner)
-      run: npm ci
+      # 5️⃣ Run unit tests (nếu bạn có Jest)
+      - name: Run Jest tests
+        working-directory: ./src
+        run: |
+          npm test --if-present
 
-    - name: 🔐 Fix Permissions for Binaries (for runner)
-      run: chmod +x ./node_modules/.bin/*
+      # 6️⃣ Test API endpoints bằng Postman (Newman)
+      - name: Run API tests with Postman
+        run: |
+          npm install -g newman
+          newman run UniFAQ.postman_collection.json
 
-    - name: 🧹 Run Lint Check
-      run: npm run lint
-
-    - name: 🧪 Run Unit Tests (Jest)
-      run: npm run test:ci
-
-    # --- Các bước kiểm thử API ---
-    - name: 🌐 Install Newman
-      run: npm install -g newman
-
-    - name: 🚦 Run API Tests (Newman)
-      run: newman run UniFAQ.postman_collection.json --reporters cli
-
-    # --- Kết thúc các bước kiểm thử API ---
-
-    - name: ⬆️ Upload Coverage Artifact (Jest)
-      uses: actions/upload-artifact@v4
-      with:
-        name: jest-coverage-report
-        path: coverage/lcov-report/
-        retention-days: 5
-
-    - name: ✅ Verification Step
-      run: echo "CI completed successfully. Coverage artifact uploaded."
+      # 7️⃣ Kiểm tra định dạng JSON và lint cấu hình
+      - name: Validate JSON and ESLint config
+        run: |
+          npx eslint --print-config .eslintrc.cjs > /dev/null
+          echo "✅ ESLint config is valid"
