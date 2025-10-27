@@ -8,7 +8,7 @@ import { findTopFaqs } from './hooks/useFaqSearch.js';
 
 // --- CONFIGURATION & STATE ---
 // eslint-disable-next-line max-len
-const GEMINI_API_KEY = 'AIzaSyCYZOtTycH6N5lOG3r7RZrpBrpDRtZCVo'; // THAY KEY BẰNG KEY CỦA BẠN
+const GEMINI_API_KEY = 'AIzaSyCYZOtTycH6N5lOG63r7RZrpBrpDRtZCVo'; // THAY KEY BẰNG KEY CỦA BẠN
 const DATA_FILE = './assets/faqs.json';
 let messages = []; // Sửa: Dùng let vì messages sẽ được gán lại
 let allFaqs = [];

@@ -17,8 +17,7 @@ jobs:
           - 3000:3000
         volumes: # Mount code vào /app trong service
           - ${{ github.workspace }}:/app
-        # SỬA LỖI CUỐI CÙNG: Dồn tất cả các tùy chọn phức tạp vào khối 'options' duy nhất, 
-        # sau khi đã xác định các khóa này không phải là tùy chọn cấp cao nhất.
+        # SỬA LỖI: Gộp tất cả các tùy chọn phức tạp vào khối 'options' duy nhất
         options: >-
           --workdir /app
           --entrypoint /bin/sh 
