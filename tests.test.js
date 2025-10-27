@@ -1,7 +1,7 @@
 // tests.test.js
 
 // Import module app để có thể truy cập và thay đổi các biến module
-const app = require('../app'); 
+const app = require('./app'); 
 
 // Import trực tiếp các hàm từ app để gọi chúng
 const { 
