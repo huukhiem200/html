@@ -11,7 +11,6 @@ export function SuggestionList(suggestions, keyword) {
   // Sửa: Bỏ escape không cần thiết cho /
   // eslint-disable-next-line max-len
   const keywordRegex = new RegExp(`(${keyword.replace(/[-/^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
-  // Sửa: Thêm dấu ngoặc đơn quanh (faq)
   return `
     <div class="suggestion-list">
       ${suggestions.map((faq) => `
