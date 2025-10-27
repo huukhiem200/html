@@ -4,7 +4,7 @@ import { ChatHeader } from './components/ChatHeader.js';
 import { InputBar } from './components/InputBar.js';
 import { MessageList } from './components/MessageList.js';
 import { SuggestionList } from './components/SuggestionList.js';
-import { findTopFaqs } from './hooks/useFaqSearch.js';
+import { findTopFaqs } from './hooks/useFaqSearch.js'; // SỬA LỖI ĐÁNH MÁY NẾU CÓ
 
 // --- CONFIGURATION & STATE ---
 const GEMINI_API_KEY = 'AIzaSyCYZOtTycH6N5lOG3r7RZrpBrpDRtZCVo'; // KEY MỚI CỦA BẠN
@@ -20,6 +20,92 @@ let chatInput = null;
 // Sửa lỗi #3 (Dòng 120): Thêm dấu ngoặc đơn quanh tham số resolve
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// --- CÁC HÀM CƠ SỞ (Được đẩy lên để giải quyết lỗi "used before defined") ---
+
+function handleSuggestionClick(event) {
+  const target = event.target.closest('.suggestion-item');
+  if (target) {
+    const questionText = target.getAttribute('data-question');
+
+    // CHỈNH SỬA TẠI ĐÂY: Lấy câu trả lời đã biết
+    // eslint-disable-next-line no-unused-vars
+    const answerText = target.getAttribute('data-answer');
+
+    // Truyền cả câu hỏi và câu trả lời đã biết vào hàm bắt đầu hội thoại
+    startConversation(questionText);
+    isShowingSuggestions = false;
+  }
+}
+
+function attachSuggestionListeners() { // ĐƯỢC GỌI TRONG RENDER
+  const items = document.querySelectorAll('.suggestion-item');
+  items.forEach((item) => {
+    item.addEventListener('click', handleSuggestionClick);
+  });
+}
+
+function setupEventListeners() { // ĐƯỢC GỌI TRONG RENDERLAYOUT
+  const chatForm = document.getElementById('chat-form');
+  // chatInput đã được gán trong renderLayout
+  const toggleButton = document.getElementById('chat-toggle-button');
+  const closeButton = document.getElementById('chat-close-button');
+  const minimizeButton = document.getElementById('chat-minimize-button');
+  const headerSearchForm = document.getElementById('header-search-form');
+  const suggestionChips = document.querySelectorAll('.suggestion-chip');
+
+  if (chatInput) {
+    chatInput.addEventListener('input', handleChatInput);
+    chatInput.addEventListener('focus', handleChatInput);
+  }
+  if (chatForm) {
+    chatForm.addEventListener('submit', handleFormSubmit);
+  }
+  if (headerSearchForm) {
+    headerSearchForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const headerInput = document.getElementById('header-search-input');
+      const userText = headerInput.value.trim();
+      if (userText && chatContainer) {
+        chatContainer.classList.add('is-open');
+        isShowingSuggestions = false; // Chuyển sang chế độ hội thoại
+        startConversation(userText);
+        headerInput.value = '';
+      }
+    });
+  }
+  suggestionChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const question = chip.getAttribute('data-question');
+      if (question && chatContainer) {
+        chatContainer.classList.add('is-open');
+        isShowingSuggestions = false; // Chuyển sang chế độ hội thoại
+        startConversation(question);
+      }
+    });
+  });
+  if (toggleButton && chatContainer) {
+    toggleButton.addEventListener('click', () => {
+      chatContainer.classList.toggle('is-open');
+    });
+  }
+  if (closeButton || minimizeButton) {
+    const closeChat = () => {
+      chatContainer.classList.remove('is-open');
+      messages = [];
+      isShowingSuggestions = true; // Đảm bảo quay lại chế độ gợi ý
+      if (chatInput) chatInput.value = '';
+      render();
+    };
+    if (closeButton) closeButton.addEventListener('click', closeChat);
+    if (minimizeButton) minimizeButton.addEventListener('click', closeChat);
+  }
+  if (chatForm) {
+    chatForm.addEventListener('submit', handleFormSubmit);
+  }
+}
+
+// --- LOGIC CỐT LÕI ---
+
 // Hàm render chính
 function render() {
   if (!displayArea) return;
@@ -32,7 +118,7 @@ function render() {
   // Kiểm tra xem người dùng đang gõ **hoặc** box đang rỗng
   if ((keyword.length > 0 && !isTyping) || messages.length === 0) {
     // Luôn hiển thị SuggestionList nếu người dùng đang gõ hoặc box rỗng
-    const suggestions = findTopFylls(keyword, allFaqs);
+    const suggestions = findTopFaqs(keyword, allFaqs); // SỬA LỖI ĐÁNH MÁY findTopFylls
     displayArea.innerHTML = SuggestionList(suggestions, keyword);
     attachSuggestionListeners();
   } else {
@@ -65,22 +151,6 @@ function handleChatInput() {
   // Không cần điều kiện gì cả, mỗi lần gõ là render lại giao diện
   render();
 }
-// Khi click vào một gợi ý
-function handleSuggestionClick(event) {
-  const target = event.target.closest('.suggestion-item');
-  if (target) {
-    const questionText = target.getAttribute('data-question');
-
-    // CHỈNH SỬA TẠI ĐÂY: Lấy câu trả lời đã biết
-    // eslint-disable-next-line no-unused-vars
-    const answerText = target.getAttribute('data-answer');
-
-    // Truyền cả câu hỏi và câu trả lời đã biết vào hàm bắt đầu hội thoại
-    startConversation(questionText);
-    isShowingSuggestions = false;
-  }
-}
-
 // Khi nhấn Enter hoặc nút Gửi
 function handleFormSubmit(event) {
   event.preventDefault();
@@ -189,66 +259,6 @@ async function startConversation(userText) {
 
 // --- CÁC HÀM CÒN LẠI ---
 
-function setupEventListeners() {
-  const chatForm = document.getElementById('chat-form');
-  // chatInput đã được gán trong renderLayout
-  const toggleButton = document.getElementById('chat-toggle-button');
-  const closeButton = document.getElementById('chat-close-button');
-  const minimizeButton = document.getElementById('chat-minimize-button');
-  const headerSearchForm = document.getElementById('header-search-form');
-  const suggestionChips = document.querySelectorAll('.suggestion-chip');
-
-  if (chatInput) {
-    chatInput.addEventListener('input', handleChatInput);
-    chatInput.addEventListener('focus', handleChatInput);
-  }
-  if (chatForm) {
-    chatForm.addEventListener('submit', handleFormSubmit);
-  }
-  if (headerSearchForm) {
-    headerSearchForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const headerInput = document.getElementById('header-search-input');
-      const userText = headerInput.value.trim();
-      if (userText && chatContainer) {
-        chatContainer.classList.add('is-open');
-        isShowingSuggestions = false; // Chuyển sang chế độ hội thoại
-        startConversation(userText);
-        headerInput.value = '';
-      }
-    });
-  }
-  suggestionChips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      const question = chip.getAttribute('data-question');
-      if (question && chatContainer) {
-        chatContainer.classList.add('is-open');
-        isShowingSuggestions = false; // Chuyển sang chế độ hội thoại
-        startConversation(question);
-      }
-    });
-  });
-  if (toggleButton && chatContainer) {
-    toggleButton.addEventListener('click', () => {
-      chatContainer.classList.toggle('is-open');
-    });
-  }
-  if (closeButton || minimizeButton) {
-    const closeChat = () => {
-      chatContainer.classList.remove('is-open');
-      messages = [];
-      isShowingSuggestions = true; // Đảm bảo quay lại chế độ gợi ý
-      if (chatInput) chatInput.value = '';
-      render();
-    };
-    if (closeButton) closeButton.addEventListener('click', closeChat);
-    if (minimizeButton) minimizeButton.addEventListener('click', closeChat);
-  }
-  if (chatForm) {
-    chatForm.addEventListener('submit', handleFormSubmit);
-  }
-}
-
 function findAnswer(question) {
   const userWords = question.toLowerCase().trim().split(/\s+/);
   if (userWords.length === 0) return null;
@@ -284,13 +294,6 @@ function findAnswer(question) {
 
   // Trả về null nếu không đạt ngưỡng, để Gemini xử lý
   return null;
-}
-
-function attachSuggestionListeners() {
-  const items = document.querySelectorAll('.suggestion-item');
-  items.forEach((item) => {
-    item.addEventListener('click', handleSuggestionClick);
-  });
 }
 
 async function main() {
