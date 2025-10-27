@@ -9,7 +9,6 @@ module.exports = {
     node: true,
     es2021: true,
     jest: true, // Thêm môi trường Jest cho các file test
-  },
   // Sử dụng cấu hình tiêu chuẩn của Airbnb và Jest
   extends: [
     'eslint:recommended',
@@ -24,6 +23,7 @@ module.exports = {
     'jest',
   ],
   rules: {
+    'linebreak-style': 'off',
     // Cho phép console.log và console.error trong môi trường phát triển
     'no-console': 'off',
     // TẮT: Giải quyết lỗi 'Imported file extensions' cho các file .js trong import.
@@ -42,10 +42,15 @@ module.exports = {
     'import/first': 'off',
     // Tắt yêu cầu đặt default export
     'import/prefer-default-export': 'off',
-    // Tắt lỗi yêu cầu định nghĩa hàm trước khi sử dụng (đã được sửa trong chatApp.js nhưng tắt trong trường hợp cần thiết)
     'no-use-before-define': 'off',
     // Bắt buộc phải có khoảng trắng trước '}'
     'object-curly-spacing': ['error', 'always'], 
     // Cho phép các dòng có tối đa 120 ký tự
-    'max-len': ['error', { code: 120, ignoreStrings: true, ignoreUrls: true }]}
+    'max-len': ['error', {
+      code: 120,
+      ignoreStrings: true,
+      ignoreUrls: true,
+    }],
+  },
+}
 };
