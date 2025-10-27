@@ -1,0 +1,43 @@
+name: UniFAQ Continuous Integration
+
+# Trigger the workflow on push or pull request to the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ⬇️ Checkout Repository Code
+      uses: actions/checkout@v4
+
+    - name: 🛠️ Setup Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: 📦 Install Dependencies
+      run: npm install
+
+    - name: 🧹 Run Lint Check
+      # Check code style and common errors
+      run: npm run lint
+      
+    - name: 🧪 Run Tests and Collect Coverage
+      # Run the defined test:ci script to generate coverage reports
+      run: npm run test:ci
+      
+    - name: ⬆️ Upload Coverage Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: jest-coverage-report
+        # The path where Jest saves the HTML coverage report
+        path: coverage/lcov-report/
+        retention-days: 5
+        
+    - name: ✅ Verification Step
+      run: echo "CI completed successfully. Coverage artifact uploaded."

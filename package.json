@@ -1,17 +1,19 @@
 {
   "name": "unifaq-project",
   "version": "1.0.0",
-  "description": "UniFAQ AI Assistant Landing Page with Express Server",
+  "description": "UniFAQ AI Assistant Landing Page",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "jest"
+    "test": "jest",
+    "test:ci": "jest --coverage",
+    "lint": "eslint --ext .js ."
   },
   "keywords": [
     "ai",
     "faq",
     "jest",
-    "express"
+    "docker"
   ],
   "author": "",
   "license": "ISC",
@@ -20,10 +22,21 @@
     "express": "^4.19.2"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest": "^28.5.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "*.js",
+      "components/*.js",
+      "hooks/*.js",
+      "!server.js",
+      "!.eslintrc.cjs" 
+    ]
   }
 }
