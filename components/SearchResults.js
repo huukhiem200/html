@@ -17,4 +17,4 @@ export function SearchResults(faqs) {
     </details>
   `).join('');
 }
-// Xóa dòng trống cuối file
+// Đã thêm newline

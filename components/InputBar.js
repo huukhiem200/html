@@ -6,4 +6,4 @@ export function InputBar() {
     </form>
   `;
 }
-// Xóa dòng trống cuối file
+// Đã thêm newline

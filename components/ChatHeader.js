@@ -7,4 +7,4 @@ export function ChatHeader() {
     </div>
   `;
 }
-// Xóa dòng trống cuối file
+// Đã thêm newline

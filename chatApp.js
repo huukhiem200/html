@@ -18,9 +18,9 @@ const chatContainer = document.getElementById('chat-container');
 let displayArea = null;
 let chatInput = null;
 
-// Sửa lỗi ESLint (promise executor): Thêm return rõ ràng
+// Sửa lỗi ESLint (promise executor): Loại bỏ return không cần thiết và sử dụng cú pháp gọn
 // eslint-disable-next-line arrow-body-style
-const sleep = (ms) => new Promise((resolve) => { return setTimeout(resolve, ms); });
+const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
 // --- LOGIC GỌI AI VÀ XỬ LÝ HỘI THOẠI (PHẢI Ở TRÊN CÁC HÀM GỌI) ---
 
@@ -308,5 +308,4 @@ async function main() {
 }
 
 document.addEventListener('DOMContentLoaded', main);
-// Xóa dòng trống cuối file
-``
+// Đã thêm newline
