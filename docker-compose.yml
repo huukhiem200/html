@@ -1,0 +1,25 @@
+services:
+  unifaq-app:
+    # Build image từ Dockerfile trong thư mục hiện tại
+    build: .
+    
+    # Ánh xạ cổng (host:container)
+    ports:
+      - "3000:3000"
+      
+    # Đặt tên container dễ nhận dạng
+    container_name: unifaq-web
+
+    # Định nghĩa Healthcheck
+    healthcheck:
+      # Kiểm tra HTTP GET đến endpoint /health
+      test: ["CMD", "wget", "--spider", "http://localhost:3000/health"]
+      interval: 30s # Kiểm tra mỗi 30 giây
+      timeout: 10s  # Timeout sau 10 giây
+      retries: 3    # Thử lại 3 lần trước khi đánh dấu là unhealthy
+      start_period: 5s # Cho 5 giây để khởi động
+      
+    # Thiết lập biến môi trường (tùy chọn)
+    environment:
+      NODE_ENV: production
+      PORT: 3000 # Cấu hình cổng cho Express
