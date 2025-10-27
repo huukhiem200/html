@@ -10,23 +10,23 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
-    services: # Configure the background service
+    services: # Cấu hình service để chạy server nền
       web:
-        image: node:20-alpine
-        ports:
+        image: node:20-alpine # Sử dụng image node cơ bản
+        ports: # Map cổng 3000 của service ra host
           - 3000:3000
-        volumes:
+        volumes: # Mount code vào /app trong service
           - ${{ github.workspace }}:/app
-        # Options include the health check
+        # SỬA LỖI CUỐI CÙNG: Dồn tất cả các tùy chọn phức tạp vào khối 'options' duy nhất, 
+        # sau khi đã xác định các khóa này không phải là tùy chọn cấp cao nhất.
         options: >-
+          --workdir /app
+          --entrypoint /bin/sh 
+          --command "-c \"npm ci && npm start\"" 
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # CORRECT INDENTATION: These are direct children of 'web:'
-        working_directory: /app
-        entrypoint: /bin/sh
-        command: -c "npm ci && npm start" # Run install then start inside the service
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -57,14 +57,14 @@ jobs:
     - name: 🧪 Run Unit Tests (Jest)
       run: npm run test:ci
 
-    # --- API Testing Steps ---
+    # --- Các bước kiểm thử API ---
     - name: 🌐 Install Newman
       run: npm install -g newman
 
     - name: 🚦 Run API Tests (Newman)
       run: newman run UniFAQ.postman_collection.json --reporters cli
 
-    # --- End API Testing Steps ---
+    # --- Kết thúc các bước kiểm thử API ---
 
     - name: ⬆️ Upload Coverage Artifact (Jest)
       uses: actions/upload-artifact@v4

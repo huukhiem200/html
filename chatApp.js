@@ -68,7 +68,7 @@ function findAnswer(question) {
  * @returns {Promise<string>}
  */
 async function getGeminiAnswer(question) {
-  const MODEL_NAME = 'gemini-2.5-flash-preview-09-2025';
+  const MODEL_NAME = 'gemini-2.5-flash';
   // eslint-disable-next-line max-len
   const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`;
   const systemInstruction = 'Bạn là UniFAQ, một trợ lý AI thân thiện. Hãy trả lời câu hỏi bằng tiếng Việt ngắn gọn và chính xác.';
