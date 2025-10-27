@@ -10,24 +10,21 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
-    services: # Cấu hình service để chạy server nền
+    services: # Cần thiết để chạy server của bạn
       web:
-        image: node:20-alpine # Sử dụng image node cơ bản
-        ports: # Map cổng 3000 của service ra host
+        image: node:20-alpine
+        ports:
           - 3000:3000
-        volumes: # Mount code vào /app trong service
-          - ${{ github.workspace }}:/app
-        # Options bao gồm workdir VÀ health check để chờ server
         options: >-
-          --workdir /app
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 5 # Tăng số lần thử health check
-        # Ghi đè entrypoint để chạy shell command
-        entrypoint: /bin/sh
-        # Lệnh chạy BÊN TRONG service: Cài đặt dependencies RỒI khởi động server
-        command: -c "npm ci && npm start"
+          --health-retries 3
+          --entrypoint /bin/sh
+        command: -c "npm install --legacy-peer-deps && npm start" # Đảm bảo server khởi động trong service
+        volumes:
+          - ${{ github.workspace }}:/app
+        working_directory: /app
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -46,17 +43,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    # BƯỚC NÀY CHỈ CẦN THIẾT NẾU LINT/JEST CẦN NODE_MODULES TRONG RUNNER CHÍNH
-    # Nếu không, bạn có thể bỏ qua để tiết kiệm thời gian
-    - name: 📦 Install Dependencies (for runner linters/tools if needed)
-      run: npm ci
+    - name: 📦 Install Dependencies Cleanly
+      run: npm ci # Sử dụng npm ci cho CI
 
-    - name: 🔐 Fix Permissions for Binaries (if needed by runner tools)
-      run: chmod +x ./node_modules/.bin/*
-
-    # BỎ BƯỚC SLEEP VÌ ĐÃ CÓ HEALTH CHECK
-    # - name: ⏳ Wait for Server to Start
-    #   run: sleep 15
+    - name: 🔐 Fix Permissions for Binaries
+      run: chmod +x ./node_modules/.bin/* # Cấp quyền thực thi
 
     - name: 🧹 Run Lint Check
       run: npm run lint
@@ -69,17 +60,17 @@ jobs:
       run: npm install -g newman
 
     - name: 🚦 Run API Tests (Newman)
-      # Newman sẽ chạy test với service 'web' (đã qua health check) đang chạy trên localhost:3000
-      run: newman run UniFAQ.postman_collection.json --reporters cli
+      run: newman run UniFAQ.postman_collection.json --reporters cli # Chạy collection đã export
 
     # --- Kết thúc các bước kiểm thử API ---
 
     - name: ⬆️ Upload Coverage Artifact (Jest)
       uses: actions/upload-artifact@v4
+      # ... (các cấu hình khác giữ nguyên)
       with:
         name: jest-coverage-report
         path: coverage/lcov-report/
         retention-days: 5
-
+        
     - name: ✅ Verification Step
       run: echo "CI completed successfully. Coverage artifact uploaded."
