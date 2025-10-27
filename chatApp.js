@@ -276,6 +276,7 @@ function render() {
     displayArea.scrollTop = displayArea.scrollHeight;
   }
 }
+
 function renderLayout() {
   if (!chatContainer) {
     return;
@@ -288,7 +289,9 @@ function renderLayout() {
   render();
   setupEventListeners();
 }
+
 // --- ENTRY POINT ---
+
 async function main() {
   try {
     const response = await fetch(DATA_FILE);
@@ -303,5 +306,6 @@ async function main() {
     }
   }
 }
+
 document.addEventListener('DOMContentLoaded', main);
-// Đã thêm newline ở cuối file (L305)
+// Đã thêm newline ở cuối file (L307)
