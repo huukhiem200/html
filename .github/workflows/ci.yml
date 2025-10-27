@@ -10,24 +10,23 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
-    services: # Configure the background service for the web server
+    services: # Configure the background service
       web:
-        image: node:20-alpine # Base Node image
-        ports: # Map port 3000
+        image: node:20-alpine
+        ports:
           - 3000:3000
-        volumes: # Mount current code into /app
+        volumes:
           - ${{ github.workspace }}:/app
-        # Options for the service container, including health check and workdir
+        # Options include the health check
         options: >-
-          --workdir /app
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # Override entrypoint to run shell command
+        # CORRECT INDENTATION: These are direct children of 'web:'
+        working_directory: /app
         entrypoint: /bin/sh
-        # Command to run INSIDE the service: install deps THEN start server
-        command: -c "npm ci && npm start"
+        command: -c "npm ci && npm start" # Run install then start inside the service
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -46,12 +45,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    # Install dependencies in the main runner for Lint/Jest steps
     - name: 📦 Install Dependencies (for runner)
       run: npm ci
 
-    # Fix permissions in the main runner (will be mounted)
-    - name: 🔐 Fix Permissions for Binaries
+    - name: 🔐 Fix Permissions for Binaries (for runner)
       run: chmod +x ./node_modules/.bin/*
 
     - name: 🧹 Run Lint Check
@@ -65,7 +62,6 @@ jobs:
       run: npm install -g newman
 
     - name: 🚦 Run API Tests (Newman)
-      # Newman tests run against the 'web' service (verified by health check)
       run: newman run UniFAQ.postman_collection.json --reporters cli
 
     # --- End API Testing Steps ---
