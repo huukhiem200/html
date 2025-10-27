@@ -19,3 +19,4 @@ export function findTopFaqs(keyword, allFaqs) {
   return scoredFaqs.filter((faq) => faq.score > 0).sort((a, b) => b.score - a.score).slice(0, 3);
   
 }
+// Xóa dòng trống cuối file
