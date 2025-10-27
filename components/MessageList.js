@@ -10,4 +10,3 @@ export function MessageList(messages) {
     </div>
   `).join('');
 }
-// Đã thêm newline ở cuối file

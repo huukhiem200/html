@@ -6,4 +6,3 @@ export function InputBar() {
     </form>
   `;
 }
-// Đã thêm newline ở cuối file

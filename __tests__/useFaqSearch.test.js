@@ -41,4 +41,3 @@ describe('findTopFaqs', () => {
     expect(results).toHaveLength(0);
   });
 });
-// Đã thêm newline ở cuối file (L45)
