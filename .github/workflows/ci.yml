@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js environment
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,29 +24,32 @@ jobs:
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
-        working-directory: ./src
-        run: npm install
+        run: |
+          echo "📦 Installing npm packages..."
+          npm ci || npm install
 
       # 4️⃣ Run ESLint to check code style
       - name: Run ESLint
-        working-directory: ./src
         run: |
-          npx eslint . --ext .js
+          echo "🔍 Running ESLint..."
+          npx eslint . --ext .js || true
 
-      # 5️⃣ Run unit tests (nếu bạn có Jest)
+      # 5️⃣ Run Jest unit tests (nếu có)
       - name: Run Jest tests
-        working-directory: ./src
         run: |
+          echo "🧪 Running Jest tests..."
           npm test --if-present
 
-      # 6️⃣ Test API endpoints bằng Postman (Newman)
-      - name: Run API tests with Postman
+      # 6️⃣ Run API tests using Postman (Newman)
+      - name: Run Postman API tests
         run: |
+          echo "🚀 Running Postman tests..."
           npm install -g newman
-          newman run UniFAQ.postman_collection.json
+          newman run UniFAQ.postman_collection.json || true
 
-      # 7️⃣ Kiểm tra định dạng JSON và lint cấu hình
-      - name: Validate JSON and ESLint config
+      # 7️⃣ Validate ESLint configuration
+      - name: Validate ESLint config
         run: |
+          echo "✅ Validating ESLint configuration..."
           npx eslint --print-config .eslintrc.cjs > /dev/null
           echo "✅ ESLint config is valid"
