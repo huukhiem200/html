@@ -9,7 +9,8 @@ module.exports = {
     node: true,
     es2021: true,
     jest: true, // Thêm môi trường Jest cho các file test
-  // Sử dụng cấu hình tiêu chuẩn của Airbnb và Jest
+  }, 
+  // SỬA LỖI: 'extends' PHẢI NẰM NGOÀI 'env', ngang hàng với 'env'
   extends: [
     'eslint:recommended',
     'airbnb-base',
@@ -23,14 +24,13 @@ module.exports = {
     'jest',
   ],
   rules: {
-    'linebreak-style': 'off',
+    // Tắt quy tắc này để cho phép cả LF (Linux/Mac) và CRLF (Windows)
+    'linebreak-style': 'off', 
     // Cho phép console.log và console.error trong môi trường phát triển
     'no-console': 'off',
     // TẮT: Giải quyết lỗi 'Imported file extensions' cho các file .js trong import.
-    // Thường xảy ra với cấu hình module của AirBnB.
     'import/extensions': 'off', 
     // Cho phép sử dụng các biến như 'messages', 'allFaqs' chưa được định nghĩa
-    // vì chúng là các biến toàn cục trong scope của chatApp.js.
     'no-unused-vars': ['error', { argsIgnorePattern: '^_|faq|keyword|allFaqs|messages' }],
     // Cho phép sử dụng cú pháp function declaration thay vì arrow function
     'prefer-arrow-callback': 'off',
@@ -40,8 +40,9 @@ module.exports = {
     'no-underscore-dangle': 'off',
     // Tắt yêu cầu đặt import đầu file để phù hợp với các file module.
     'import/first': 'off',
-    // Tắt yêu cầu đặt default export
+    // Tắt yêuCầu đặt default export
     'import/prefer-default-export': 'off',
+    // Tắt lỗi yêu cầu định nghĩa hàm trước khi sử dụng
     'no-use-before-define': 'off',
     // Bắt buộc phải có khoảng trắng trước '}'
     'object-curly-spacing': ['error', 'always'], 
@@ -52,5 +53,5 @@ module.exports = {
       ignoreUrls: true,
     }],
   },
-}
 };
+// Đã thêm newline ở cuối file
