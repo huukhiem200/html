@@ -1,13 +1,16 @@
 export function SuggestionList(suggestions, keyword) {
   if (!keyword) {
-    return `<div class="search-results__initial">Nhập từ khóa để xem các câu hỏi gợi ý...</div>`;
+    // Sửa: Dùng single quote
+    return '<div class="search-results__initial">Nhập từ khóa để xem các câu hỏi gợi ý...</div>';
   }
   if (suggestions.length === 0) {
-    return `<div class="search-results__initial">Không tìm thấy gợi ý nào.</div>`;
+    // Sửa: Dùng single quote
+    return '<div class="search-results__initial">Không tìm thấy gợi ý nào.</div>';
   }
   // Tạo regex để làm nổi bật từ khóa
+  // Sửa: Bỏ escape không cần thiết cho /
   // eslint-disable-next-line max-len
-  const keywordRegex = new RegExp(`(${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+  const keywordRegex = new RegExp(`(${keyword.replace(/[-/^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
   return `
     <div class="suggestion-list">
       ${suggestions.map((faq) => `
@@ -18,3 +21,4 @@ export function SuggestionList(suggestions, keyword) {
     </div>
   `;
 }
+// Sửa: Thêm dòng trống cuối file
