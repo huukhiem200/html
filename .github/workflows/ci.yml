@@ -19,8 +19,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 20
-    
-    # BƯỚC MỚI: Cấu hình cache cho npm để tăng tốc
+
     - name: 📦 Cache Node Modules
       uses: actions/cache@v4
       with:
@@ -30,9 +29,12 @@ jobs:
           ${{ runner.os }}-node-
 
     - name: 📦 Install Dependencies
-      # Sửa: Thêm --force để buộc cài đặt lại, bỏ qua các vấn đề về phiên bản/cache bị lỗi
-      # Lệnh này giúp khắc phục lỗi 'exit code 127' nếu nó do Jest/ESLint không thể chạy
-      run: npm install --force
+      # Sử dụng cờ --legacy-peer-deps nếu npm install gặp vấn đề với Jest, hoặc --force để buộc cài đặt lại
+      run: npm install --force 
+
+    - name: 🔐 Fix Permissions for Jest Binary
+      # Sửa: Đảm bảo Jest và các binaries khác có quyền thực thi (executable)
+      run: chmod +x node_modules/.bin/jest
       
     - name: 🧹 Run Lint Check
       # Check code style and common errors
