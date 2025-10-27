@@ -10,21 +10,21 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
-    services: # Cần thiết để chạy server của bạn
+    services: # Cấu hình service để chạy server nền
       web:
-        image: node:20-alpine
-        ports:
+        image: node:20-alpine # Sử dụng image node cơ bản
+        ports: # Map cổng 3000 của service ra host
           - 3000:3000
+        volumes: # Mount code hiện tại (bao gồm node_modules sau khi cài) vào /app trong service
+          - ${{ github.workspace }}:/app
+        # Options cho container, bao gồm health check và workdir
         options: >-
+          --workdir /app 
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
-          --entrypoint /bin/sh
-        command: -c "npm install --legacy-peer-deps && npm start" # Đảm bảo server khởi động trong service
-        volumes:
-          - ${{ github.workspace }}:/app
-        working_directory: /app
+        # Service sẽ tự chạy CMD mặc định của image (hoặc Dockerfile), tức là "npm start" trong /app
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -44,7 +44,7 @@ jobs:
           ${{ runner.os }}-node-
 
     - name: 📦 Install Dependencies Cleanly
-      run: npm ci # Sử dụng npm ci cho CI
+      run: npm ci # Cài đặt dependencies, tạo node_modules
 
     - name: 🔐 Fix Permissions for Binaries
       run: chmod +x ./node_modules/.bin/* # Cấp quyền thực thi
@@ -60,13 +60,13 @@ jobs:
       run: npm install -g newman
 
     - name: 🚦 Run API Tests (Newman)
-      run: newman run UniFAQ.postman_collection.json --reporters cli # Chạy collection đã export
+      # Newman sẽ chạy test với service 'web' đang chạy trên localhost:3000
+      run: newman run UniFAQ.postman_collection.json --reporters cli 
 
     # --- Kết thúc các bước kiểm thử API ---
 
     - name: ⬆️ Upload Coverage Artifact (Jest)
       uses: actions/upload-artifact@v4
-      # ... (các cấu hình khác giữ nguyên)
       with:
         name: jest-coverage-report
         path: coverage/lcov-report/
