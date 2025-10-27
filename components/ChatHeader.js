@@ -8,4 +8,3 @@ export function ChatHeader() {
     </div>
   `;
 }
-// Sửa: Thêm dòng trống cuối file

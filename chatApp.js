@@ -1,11 +1,9 @@
 // chatApp.js (Phiên bản Cuối cùng: Đã sửa lỗi CI)
-
 import { ChatHeader } from './components/ChatHeader.js';
 import { InputBar } from './components/InputBar.js';
 import { MessageList } from './components/MessageList.js';
 import { SuggestionList } from './components/SuggestionList.js';
 import { findTopFaqs } from './hooks/useFaqSearch.js';
-
 // --- CONFIGURATION & STATE ---
 // eslint-disable-next-line max-len
 const GEMINI_API_KEY = 'AIzaSyCYZOtTycH6N5lOG3r7RZrpBrpDRtZCVo'; // THAY KEY BẰNG KEY CỦA BẠN
@@ -13,17 +11,13 @@ const DATA_FILE = './assets/faqs.json';
 let messages = []; // Sửa: Dùng let vì messages sẽ được gán lại
 let allFaqs = [];
 let isShowingSuggestions = true;
-
 const chatContainer = document.getElementById('chat-container');
 let displayArea = null;
 let chatInput = null;
-
 // Sửa lỗi ESLint (promise executor): Thêm return rõ ràng
 // eslint-disable-next-line arrow-body-style
 const sleep = (ms) => new Promise((resolve) => { return setTimeout(resolve, ms); });
-
 // --- LOGIC GỌI AI VÀ XỬ LÝ HỘI THOẠI (PHẢI Ở TRÊN CÁC HÀM GỌI) ---
-
 /**
  * Hàm tìm kiếm câu trả lời trong Mock DB
  * @param {string} question
@@ -61,7 +55,6 @@ function findAnswer(question) {
   }
   return null;
 }
-
 /**
  * Gọi API Gemini để lấy câu trả lời
  * @param {string} question
@@ -109,7 +102,6 @@ async function getGeminiAnswer(question) {
     return 'Rất tiếc, đã có lỗi mạng hoặc kết nối không ổn định.';
   }
 }
-
 /**
  * Xử lý luồng hội thoại (Gửi tin nhắn, tìm kiếm, gọi AI)
  * @param {string} userText
@@ -153,9 +145,7 @@ async function startConversation(userText) {
     submitBtn.disabled = false;
   }
 }
-
 // --- CÁC HÀM XỬ LÝ SỰ KIỆN ---
-
 function handleSuggestionClick(event) {
   const target = event.target.closest('.suggestion-item');
   if (target) {
@@ -247,9 +237,7 @@ function setupEventListeners() {
     }
   }
 }
-
 // --- HÀM RENDER ---
-
 function updateMessages() {
   const messageListContainer = document.getElementById('display-area');
   if (!messageListContainer) {
@@ -284,14 +272,11 @@ function renderLayout() {
   chatContainer.innerHTML = `${ChatHeader()}<div class="message-list" id="display-area"></div>${InputBar()}`;
   displayArea = document.getElementById('display-area');
   chatInput = document.getElementById('chat-input');
-
   messages = []; // Gán lại mảng rỗng
   render();
   setupEventListeners();
 }
-
 // --- ENTRY POINT ---
-
 async function main() {
   try {
     const response = await fetch(DATA_FILE);
@@ -306,7 +291,4 @@ async function main() {
     }
   }
 }
-
 document.addEventListener('DOMContentLoaded', main);
-// Sửa: Thêm dòng trống cuối file
-

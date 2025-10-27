@@ -7,4 +7,3 @@ export function InputBar() {
     </form>
   `;
 }
-//
