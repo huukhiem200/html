@@ -1,121 +1,163 @@
 {
 	"info": {
 		"_postman_id": "4a0079c4-ce08-4f72-ae8a-d21ebb96f048",
-		"name": "UniFAQ API",
+		"name": "UniFAQ API (Full CRUD)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29733626"
 	},
 	"item": [
 		{
-			"name": "/health",
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"url": "http://localhost:3000/health"
+			},
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Test 1: Mã trạng thái là 200\r",
-							"pm.test(\"Status code is 200 OK\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"// Test 2: Thời gian phản hồi nhanh (ví dụ: dưới 300ms)\r",
-							"pm.test(\"Response time is less than 300ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
-							"});\r",
-							"\r",
-							"// Test 3: Body phản hồi chính xác là \"OK\"\r",
-							"pm.test(\"Response body is 'OK'\", function () {\r",
-							"    pm.expect(pm.response.text()).to.eql(\"OK\");\r",
-							"});\r",
-							"\r",
-							"// Test 4: Header Content-Type là text/plain\r",
-							"pm.test(\"Content-Type header is text/plain\", function () {\r",
-							"    pm.response.to.have.header(\"Content-Type\");\r",
-							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/plain\");\r",
-							"});\r",
-							"\r",
-							"// Test 5: Header Cache-Control ngăn chặn caching\r",
-							"pm.test(\"Cache-Control header is set correctly\", function () {\r",
-							"    pm.expect(pm.response.headers.get(\"Cache-Control\")).to.eql(\"no-store, no-cache, must-revalidate, proxy-revalidate\");\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
+							"pm.test('Status 200 OK', function () { pm.response.to.have.status(200); });",
+							"pm.test('Body is OK', function () { pm.expect(pm.response.text()).to.eql('OK'); });",
+							"pm.test('Cache-Control header set', function () { pm.expect(pm.response.headers.get('Cache-Control')).to.include('no-store'); });"
+						]
 					}
 				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/health",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"health"
-					]
-				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "localhost:3000",
-			"event": [ 
+			"name": "Get All FAQs",
+			"request": {
+				"method": "GET",
+				"url": "http://localhost:3000/faqs"
+			},
+			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Test 1: Mã trạng thái là 200 OK\r",
-							"pm.test(\"Status code is 200 OK\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"// Test 2: Thời gian phản hồi chấp nhận được (ví dụ: dưới 800ms)\r",
-							"pm.test(\"Response time is less than 800ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
-							"});\r",
-							"\r",
-							"// Test 3: Header Content-Type là HTML\r",
-							"pm.test(\"Content-Type header is text/html\", function () {\r",
-							"    pm.response.to.have.header(\"Content-Type\");\r",
-							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/html\");\r",
-							"});\r",
-							"\r",
-							"// Test 4: Body chứa thẻ HTML\r",
-							"pm.test(\"Response body includes <html> tag\", function () {\r",
-							"    pm.expect(pm.response.text()).to.include(\"<html>\");\r",
-							"});\r",
-							"\r",
-							"// Test 5: Body chứa div container chat chính\r",
-							"pm.test(\"Response body includes chat container div\", function () {\r",
-							"    // Điều chỉnh class/id nếu cần\r",
-							"    pm.expect(pm.response.text()).to.include('<div class=\"chat-widget\" id=\"chat-container\">'); \r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {}
+							"pm.test('Status 200 OK', function () { pm.response.to.have.status(200); });",
+							"pm.test('Response is JSON array', function () { pm.expect(Array.isArray(pm.response.json())).to.be.true; });"
+						]
 					}
 				}
-			],
+			]
+		},
+		{
+			"name": "Get One FAQ (id=1)",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"url": "http://localhost:3000/faqs/1"
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status 200 OK', function () { pm.response.to.have.status(200); });",
+							"pm.test('Response contains id, question, answer', function () { var body = pm.response.json(); pm.expect(body).to.have.property('id'); pm.expect(body).to.have.property('question'); pm.expect(body).to.have.property('answer'); });"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Create New FAQ",
+			"request": {
+				"method": "POST",
+				"header": [
+					{ "key": "Content-Type", "value": "application/json" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"question\": \"API Test Question\",\n  \"answer\": \"This FAQ was created via Postman test.\"\n}"
+				},
+				"url": "http://localhost:3000/faqs"
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status 201 Created', function () { pm.response.to.have.status(201); });",
+							"var body = pm.response.json();",
+							"pm.environment.set('faqId', body.faq.id);",
+							"pm.test('Created object has id, question, answer', function () { pm.expect(body.faq).to.have.property('id'); pm.expect(body.faq).to.have.property('question'); pm.expect(body.faq).to.have.property('answer'); });"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Update Existing FAQ",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{ "key": "Content-Type", "value": "application/json" }
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"question\": \"Updated question via Postman\",\n  \"answer\": \"Updated answer text.\"\n}"
+				},
 				"url": {
-					"raw": "http://localhost:3000/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
+					"raw": "http://localhost:3000/faqs/{{faqId}}",
+					"host": ["localhost"],
 					"port": "3000",
-					"path": [
-						""
-					]
+					"path": ["faqs", "{{faqId}}"]
 				}
 			},
-			"response": []
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status 200 OK', function () { pm.response.to.have.status(200); });",
+							"pm.test('FAQ updated successfully', function () { pm.expect(pm.response.json().faq.question).to.include('Updated'); });"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Delete FAQ",
+			"request": {
+				"method": "DELETE",
+				"url": {
+					"raw": "http://localhost:3000/faqs/{{faqId}}",
+					"host": ["localhost"],
+					"port": "3000",
+					"path": ["faqs", "{{faqId}}"]
+				}
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status 200 OK', function () { pm.response.to.have.status(200); });",
+							"pm.test('Response confirms deletion', function () { pm.expect(pm.response.json().message).to.include('deleted'); });"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Home Page",
+			"request": {
+				"method": "GET",
+				"url": "http://localhost:3000/"
+			},
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status 200 OK', function () { pm.response.to.have.status(200); });",
+							"pm.test('Contains <html> tag', function () { pm.expect(pm.response.text()).to.include('<html>'); });"
+						]
+					}
+				}
+			]
 		}
 	]
 }
