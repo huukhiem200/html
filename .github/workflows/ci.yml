@@ -1,6 +1,5 @@
 name: UniFAQ Continuous Integration
 
-# Trigger the workflow on push or pull request to the main branch
 on:
   push:
     branches: [ main ]
@@ -10,6 +9,22 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+
+    services: # Cần thiết để chạy server của bạn
+      web:
+        image: node:20-alpine
+        ports:
+          - 3000:3000
+        options: >-
+          --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+          --entrypoint /bin/sh
+        command: -c "npm install --legacy-peer-deps && npm start" # Đảm bảo server khởi động trong service
+        volumes:
+          - ${{ github.workspace }}:/app
+        working_directory: /app
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -29,21 +44,29 @@ jobs:
           ${{ runner.os }}-node-
 
     - name: 📦 Install Dependencies Cleanly
-      # SỬA: Dùng npm ci để cài đặt sạch từ package-lock.json, đáng tin cậy hơn cho CI
-      run: npm ci 
+      run: npm ci # Sử dụng npm ci cho CI
 
     - name: 🔐 Fix Permissions for Binaries
-      # Giữ lại bước này để đảm bảo quyền thực thi
-      run: chmod +x ./node_modules/.bin/*
-      
+      run: chmod +x ./node_modules/.bin/* # Cấp quyền thực thi
+
     - name: 🧹 Run Lint Check
       run: npm run lint
-      
-    - name: 🧪 Run Tests and Collect Coverage
+
+    - name: 🧪 Run Unit Tests (Jest)
       run: npm run test:ci
-      
-    - name: ⬆️ Upload Coverage Artifact
+
+    # --- Các bước kiểm thử API ---
+    - name: 🌐 Install Newman
+      run: npm install -g newman
+
+    - name: 🚦 Run API Tests (Newman)
+      run: newman run UniFAQ.postman_collection.json --reporters cli # Chạy collection đã export
+
+    # --- Kết thúc các bước kiểm thử API ---
+
+    - name: ⬆️ Upload Coverage Artifact (Jest)
       uses: actions/upload-artifact@v4
+      # ... (các cấu hình khác giữ nguyên)
       with:
         name: jest-coverage-report
         path: coverage/lcov-report/
