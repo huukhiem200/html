@@ -178,5 +178,10 @@
     "id": 36,
     "question": "Mức học phí chính thức cho một đơn vị tín chỉ là bao nhiêu tiền?",
     "answer": "Học phí tiêu chuẩn cho các môn học đại cương là **400.000 VNĐ/tín chỉ** và **550.000 VNĐ/tín chỉ** đối với các môn chuyên ngành. Vui lòng kiểm tra thông báo chính thức của Phòng Kế hoạch Tài chính."
+  },
+  {
+    "id": 37,
+    "question": "API Test Question",
+    "answer": "This FAQ was created via Postman test."
   }
 ]

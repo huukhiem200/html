@@ -1,125 +1,123 @@
 import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 
-// Thiết lập đường dẫn hiện tại (ES Module)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
 
-// Middleware để đọc JSON từ body
 app.use(express.json());
 
-// Cấu hình phục vụ file tĩnh (HTML, CSS, JS)
-app.use(express.static(__dirname));
-
-// Đường dẫn file dữ liệu FAQs
-const DATA_FILE = path.join(__dirname, 'faqs.json');
-
-// 🧩 Hàm đọc dữ liệu từ file JSON
+// 🔹 Đường dẫn tuyệt đối tới file dữ liệu FAQs
+const DATA_FILE = path.join(__dirname, 'assets', 'faqs.json');
+// Hàm đọc dữ liệu FAQs
 function loadFaqs() {
-  if (!fs.existsSync(DATA_FILE)) return [];
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  try {
+    if (!fs.existsSync(DATA_FILE)) return [];
+    const data = fs.readFileSync(DATA_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Error reading faqs.json:', err);
+    return [];
+  }
 }
 
-// 🧩 Hàm ghi dữ liệu vào file JSON
+// Hàm lưu dữ liệu FAQs
 function saveFaqs(faqs) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(faqs, null, 2), 'utf-8');
+  fs.writeFileSync(DATA_FILE, JSON.stringify(faqs, null, 2), 'utf8');
 }
 
-// 🟢 CREATE FAQ
+// 🟢 CREATE
 app.post('/faqs', (req, res) => {
   const { question, answer } = req.body;
-
   if (!question || !answer) {
-    return res.status(400).json({ message: '❌ Both question and answer are required.' });
+    return res.status(400).json({ message: 'Missing question or answer.' });
   }
 
   const faqs = loadFaqs();
   const newId = faqs.length > 0 ? Math.max(...faqs.map((f) => f.id)) + 1 : 1;
-
   const newFaq = { id: newId, question, answer };
+
   faqs.push(newFaq);
   saveFaqs(faqs);
-
-  return res.status(201).json({ message: '✅ FAQ created successfully.', faq: newFaq });
+  // 💡 SỬA LỖI 1: Thêm 'return' ở đây
+  return res.status(201).json({ message: 'FAQ created successfully.', faq: newFaq });
 });
 
-// 🔵 READ ALL FAQs
+// 🔵 READ ALL
 app.get('/faqs', (req, res) => {
   const faqs = loadFaqs();
   return res.status(200).json(faqs);
 });
 
-// 🔵 READ ONE FAQ
+// 🔵 READ ONE
 app.get('/faqs/:id', (req, res) => {
   const id = Number(req.params.id);
   const faqs = loadFaqs();
+
+  // ⚠️ Kiểm tra id có phải là số hợp lệ không
+  if (Number.isNaN(id)) {
+    return res.status(400).json({ message: 'Invalid FAQ id.' });
+  }
+
   const faq = faqs.find((f) => f.id === id);
 
   if (!faq) {
-    return res.status(404).json({ message: '⚠️ FAQ not found.' });
+    return res.status(404).json({ message: 'FAQ not found.' });
   }
 
   return res.status(200).json(faq);
 });
 
-// 🟡 UPDATE FAQ
+// 🟡 UPDATE
 app.put('/faqs/:id', (req, res) => {
   const id = Number(req.params.id);
   const { question, answer } = req.body;
-
   const faqs = loadFaqs();
   const index = faqs.findIndex((f) => f.id === id);
 
   if (index === -1) {
-    return res.status(404).json({ message: '⚠️ FAQ not found.' });
+    return res.status(44).json({ message: 'FAQ not found.' });
   }
-
   if (!question || !answer) {
-    return res.status(400).json({ message: '❌ Both question and answer are required for update.' });
+    return res.status(400).json({ message: 'Missing fields for update.' });
   }
 
   faqs[index] = { id, question, answer };
   saveFaqs(faqs);
 
-  return res.status(200).json({ message: '✅ FAQ updated successfully.', faq: faqs[index] });
+  return res.status(200).json({ message: 'FAQ updated successfully.', faq: faqs[index] });
 });
 
-// 🔴 DELETE FAQ
+// 🔴 DELETE
 app.delete('/faqs/:id', (req, res) => {
   const id = Number(req.params.id);
   const faqs = loadFaqs();
   const index = faqs.findIndex((f) => f.id === id);
 
   if (index === -1) {
-    return res.status(404).json({ message: '⚠️ FAQ not found.' });
+    return res.status(404).json({ message: 'FAQ not found.' });
   }
 
   const deleted = faqs.splice(index, 1)[0];
   saveFaqs(faqs);
-
-  return res.status(200).json({ message: '🗑️ FAQ deleted successfully.', deleted });
+  return res.status(200).json({ message: 'FAQ deleted successfully.', deleted });
 });
 
 // 🩵 HEALTH CHECK
 app.get('/health', (req, res) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.set('Pragma', 'no-cache');
-  res.set('Expires', '0');
-  res.set('Surrogate-Control', 'no-store');
-  res.status(200).send('OK');
+  res.set('Cache-Control', 'no-store');
+  // 💡 SỬA LỖI 2: Thêm 'return' ở đây
+  return res.status(200).send('OK');
 });
 
-// 🏠 Trang chính (HTML)
+// 🏠 TRANG CHÍNH HTML
+app.use(express.static(__dirname));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index4.html'));
 });
-
-// 🚀 Chạy server
-app.listen(port, () => {
-  console.log(`✅ UniFAQ server running at http://localhost:${port}`);
-});
+// 🚀 Start server
+app.listen(port, () => console.log(`✅ UniFAQ server running at http://localhost:${port}`));

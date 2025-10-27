@@ -56,7 +56,7 @@ function findAnswer(question) {
     }
   });
 
-  if (bestMatch.score > 5) {
+  if (bestMatch.score >= 4) {
     return bestMatch.faq.answer;
   }
   return null;
