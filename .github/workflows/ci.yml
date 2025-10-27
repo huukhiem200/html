@@ -18,15 +18,14 @@ jobs:
         volumes: # Mount code vào /app trong service
           - ${{ github.workspace }}:/app
         
-        # SỬA TRIỆT ĐỂ: Chỉ sử dụng các khóa hợp lệ và đặt lệnh khởi động vào options
+        # SỬA LỖI: Xóa comment khỏi chuỗi lệnh trong options
         options: >-
           --workdir /app
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          # Thêm lệnh khởi động server vào cuối options
-          npm ci && npm start
+          npm ci && npm start # Lệnh khởi động server nằm ở đây
 
     steps:
     - name: ⬇️ Checkout Repository Code
