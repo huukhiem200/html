@@ -1,3 +1,4 @@
+// components/ChatHeader.js
 export function ChatHeader() {
   return `
     <div class="chat-header">

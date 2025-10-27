@@ -1,3 +1,8 @@
+// components/SearchResults.js
+
+/**
+ * Render danh sách kết quả tìm kiếm (Top 3)
+ */
 export function SearchResults(faqs) {
   if (!faqs || faqs.length === 0) {
     // Sửa: Dùng single quote

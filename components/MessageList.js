@@ -9,4 +9,4 @@ export function MessageList(messages) {
     </div>
   `).join('');
 }
-// Sửa: Chỉ để 1 dòng trống cuối file
+// Sửa: Thêm dòng trống cuối file
