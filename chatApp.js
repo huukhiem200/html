@@ -258,6 +258,7 @@ function updateMessages() {
   messageListContainer.innerHTML = MessageList(messages);
   messageListContainer.scrollTop = messageListContainer.scrollHeight;
 }
+
 function render() {
   if (!displayArea) {
     return;
@@ -282,12 +283,12 @@ function renderLayout() {
   chatContainer.innerHTML = `${ChatHeader()}<div class="message-list" id="display-area"></div>${InputBar()}`;
   displayArea = document.getElementById('display-area');
   chatInput = document.getElementById('chat-input');
+
   messages = []; // Gán lại mảng rỗng
   render();
   setupEventListeners();
 }
 // --- ENTRY POINT ---
-
 async function main() {
   try {
     const response = await fetch(DATA_FILE);
@@ -303,3 +304,4 @@ async function main() {
   }
 }
 document.addEventListener('DOMContentLoaded', main);
+// Đã thêm newline ở cuối file (L305)
