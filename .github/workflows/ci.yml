@@ -18,11 +18,13 @@ jobs:
         volumes: # Mount code vào /app trong service
           - ${{ github.workspace }}:/app
         
-        # SỬA LỖI: Loại bỏ comment khỏi chuỗi lệnh trong options
+        # SỬA TRIỆT ĐỂ: Sử dụng cú pháp Mảng (Array/Exec form) cho command 
+        # Đây là cách chính xác nhất để chạy nhiều lệnh trong Docker Service
+        entrypoint: ["/bin/sh", "-c"]
+        command: ["npm ci && npm start"] 
+        
         options: >-
           --workdir /app
-          --entrypoint /bin/sh 
-          -c "npm ci && npm start" 
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
