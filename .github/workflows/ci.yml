@@ -17,11 +17,14 @@ jobs:
           - 3000:3000
         volumes: # Mount code vào /app trong service
           - ${{ github.workspace }}:/app
-        # SỬA LỖI: Gộp tất cả các tùy chọn phức tạp vào khối 'options' duy nhất
+        
+        # SỬA LỖI: Loại bỏ --command và --entrypoint khỏi options
+        # và sử dụng các khóa YAML chính thức:
+        entrypoint: ["/bin/sh", "-c"] # Set entrypoint
+        command: "npm ci && npm start" # Set the command to run (install then start)
+
         options: >-
           --workdir /app
-          --entrypoint /bin/sh 
-          --command "-c \"npm ci && npm start\"" 
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
