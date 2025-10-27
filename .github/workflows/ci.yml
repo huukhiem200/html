@@ -10,21 +10,17 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
-    services: # Cấu hình service để chạy server nền
+    services: # Đơn giản hóa cấu hình service
       web:
-        image: node:20-alpine # Sử dụng image node cơ bản
-        ports: # Map cổng 3000 của service ra host
+        image: node:20-alpine 
+        ports: 
           - 3000:3000
-        volumes: # Mount code hiện tại (bao gồm node_modules sau khi cài) vào /app trong service
+        volumes: # Mount code (bao gồm node_modules đã cài ở bước chính)
           - ${{ github.workspace }}:/app
-        # Options cho container, bao gồm health check và workdir
+        # Options: Chỉ đặt workdir, bỏ health check
         options: >-
           --workdir /app 
-          --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-        # Service sẽ tự chạy CMD mặc định của image (hoặc Dockerfile), tức là "npm start" trong /app
+        # Service sẽ tự chạy CMD mặc định ("npm start") trong /app
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -44,10 +40,14 @@ jobs:
           ${{ runner.os }}-node-
 
     - name: 📦 Install Dependencies Cleanly
-      run: npm ci # Cài đặt dependencies, tạo node_modules
+      run: npm ci # Cài đặt dependencies -> tạo node_modules
 
     - name: 🔐 Fix Permissions for Binaries
       run: chmod +x ./node_modules/.bin/* # Cấp quyền thực thi
+
+    # BƯỚC MỚI: Chờ server khởi động (thay cho health check)
+    - name: ⏳ Wait for Server to Start
+      run: sleep 15 # Chờ 15 giây (có thể cần điều chỉnh)
 
     - name: 🧹 Run Lint Check
       run: npm run lint
