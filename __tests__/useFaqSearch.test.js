@@ -41,5 +41,3 @@ describe('findTopFaqs', () => {
     expect(results).toHaveLength(0);
   });
 });
-
-// Đảm bảo có newline ở cuối file

@@ -12,18 +12,17 @@ jobs:
 
     services: # Cấu hình service để chạy server nền
       web:
-        image: node:20-alpine # Sử dụng image node cơ bản
-        ports: # Map cổng 3000 của service ra host
+        image: node:20-alpine
+        ports:
           - 3000:3000
-        volumes: # Mount code vào /app trong service
+        volumes:
           - ${{ github.workspace }}:/app
         working_directory: /app # Đặt thư mục làm việc BÊN TRONG service
         
-        # SỬA TRIỆT ĐỂ: Sử dụng cú pháp mảng cho command và loại bỏ 'entrypoint' khỏi khối lỗi
-        # Docker sẽ chạy lệnh này bằng shell mặc định (sh)
-        command: ["/bin/sh", "-c", "npm ci && npm start"]
+        # SỬA LỖI: Sử dụng cú pháp mảng cho command, là cách chuẩn nhất
+        entrypoint: ["/bin/sh", "-c"]
+        command: ["npm ci && npm start"]
 
-        # Options chỉ còn lại health check
         options: >-
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
