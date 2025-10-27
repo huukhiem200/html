@@ -308,4 +308,3 @@ async function main() {
 }
 
 document.addEventListener('DOMContentLoaded', main);
-// Đã thêm newline ở cuối file (L307)
