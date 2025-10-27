@@ -12,22 +12,21 @@ jobs:
 
     services: # Cấu hình service để chạy server nền
       web:
-        image: node:20-alpine
-        ports:
+        image: node:20-alpine # Sử dụng image node cơ bản
+        ports: # Map cổng 3000 của service ra host
           - 3000:3000
-        volumes:
+        volumes: # Mount code vào /app trong service
           - ${{ github.workspace }}:/app
-        working_directory: /app # Đặt thư mục làm việc BÊN TRONG service
         
-        # SỬA LỖI: Sử dụng cú pháp mảng cho command, là cách chuẩn nhất
-        entrypoint: ["/bin/sh", "-c"]
-        command: ["npm ci && npm start"]
-
+        # SỬA TRIỆT ĐỂ: Chỉ sử dụng các khóa hợp lệ và đặt lệnh khởi động vào options
         options: >-
+          --workdir /app
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          # Thêm lệnh khởi động server vào cuối options
+          npm ci && npm start
 
     steps:
     - name: ⬇️ Checkout Repository Code
