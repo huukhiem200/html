@@ -16,4 +16,5 @@ export function findTopFaqs(keyword, allFaqs) {
     return { ...faq, score };
   });
   // Sửa: Thêm dấu ngoặc đơn quanh (a, b) và (faq)
-  return scoredFaqs.filter((faq) => faq.score > 0).sort((a, b) => b.score - a.score).slice(0, 3);}
+  return scoredFaqs.filter((faq) => faq.score > 0).sort((a, b) => b.score - a.score).slice(0, 3);
+}

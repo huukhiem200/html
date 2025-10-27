@@ -289,9 +289,7 @@ function renderLayout() {
   render();
   setupEventListeners();
 }
-
 // --- ENTRY POINT ---
-
 async function main() {
   try {
     const response = await fetch(DATA_FILE);
@@ -306,5 +304,4 @@ async function main() {
     }
   }
 }
-
-document.addEventListener('DOMContentLoaded', main);
+main();
