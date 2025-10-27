@@ -28,26 +28,24 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - name: 📦 Install Dependencies
-      run: npm install --force 
+    - name: 📦 Install Dependencies Cleanly
+      # SỬA: Dùng npm ci để cài đặt sạch từ package-lock.json, đáng tin cậy hơn cho CI
+      run: npm ci 
 
     - name: 🔐 Fix Permissions for Binaries
-      # Sửa: Đảm bảo TẤT CẢ các binaries (eslint, jest) đều có quyền thực thi
+      # Giữ lại bước này để đảm bảo quyền thực thi
       run: chmod +x ./node_modules/.bin/*
       
     - name: 🧹 Run Lint Check
-      # Check code style and common errors
       run: npm run lint
       
     - name: 🧪 Run Tests and Collect Coverage
-      # Run the defined test:ci script to generate coverage reports
       run: npm run test:ci
       
     - name: ⬆️ Upload Coverage Artifact
       uses: actions/upload-artifact@v4
       with:
         name: jest-coverage-report
-        # The path where Jest saves the HTML coverage report
         path: coverage/lcov-report/
         retention-days: 5
         
