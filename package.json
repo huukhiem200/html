@@ -12,8 +12,7 @@
   "keywords": [
     "ai",
     "faq",
-    "jest",
-    "docker"
+    "jest"
   ],
   "author": "",
   "license": "ISC",
@@ -33,10 +32,11 @@
     "testEnvironment": "jsdom",
     "collectCoverageFrom": [
       "*.js",
+      "__tests__/*.js",
       "components/*.js",
       "hooks/*.js",
       "!server.js",
-      "!.eslintrc.cjs" 
+      "!index4.html"
     ]
   }
 }
