@@ -10,23 +10,22 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
-    services: # Configure the background service for the web server
+    services: # Cấu hình service để chạy server nền
       web:
-        image: node:20-alpine # Base Node image
-        ports: # Map port 3000
+        image: node:20-alpine # Sử dụng image node cơ bản
+        ports: # Map cổng 3000 của service ra host
           - 3000:3000
-        volumes: # Mount current code into /app
+        volumes: # Mount code VÀ node_modules (từ bước 'npm ci' chính) vào /app
           - ${{ github.workspace }}:/app
-        # Options for the service container, including health check
+        # Options bao gồm health check để chờ server
+        # Dockerfile đã đặt WORKDIR /app
         options: >-
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # CORRECT INDENTATION: These must be at the same level as 'image', 'ports', 'volumes', 'options'
-        working_directory: /app # Set working directory INSIDE the service
-        entrypoint: /bin/sh # Override entrypoint for shell command
-        command: -c "npm ci && npm start" # Command to run INSIDE the service: install then start
+        # SỬA LỖI: Xóa 'working_directory', 'entrypoint', 'command' không hợp lệ khỏi đây.
+        # Service sẽ tự động chạy CMD ["npm", "start"] từ Dockerfile trong WORKDIR /app.
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -45,10 +44,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - name: 📦 Install Dependencies (for runner)
+    # Cài đặt dependencies TRONG RUNNER CHÍNH. node_modules sẽ được mount vào service.
+    - name: 📦 Install Dependencies (for runner and service via volume mount)
       run: npm ci
 
-    - name: 🔐 Fix Permissions for Binaries (for runner)
+    # Cấp quyền cho binaries TRONG RUNNER CHÍNH. Quyền này cũng sẽ được mount.
+    - name: 🔐 Fix Permissions for Binaries
       run: chmod +x ./node_modules/.bin/*
 
     - name: 🧹 Run Lint Check
@@ -57,15 +58,15 @@ jobs:
     - name: 🧪 Run Unit Tests (Jest)
       run: npm run test:ci
 
-    # --- API Testing Steps ---
+    # --- Các bước kiểm thử API ---
     - name: 🌐 Install Newman
       run: npm install -g newman
 
     - name: 🚦 Run API Tests (Newman)
-      # Newman tests run against the 'web' service on localhost:3000
+      # Newman chạy test với service 'web' (đã qua health check)
       run: newman run UniFAQ.postman_collection.json --reporters cli
 
-    # --- End API Testing Steps ---
+    # --- Kết thúc các bước kiểm thử API ---
 
     - name: ⬆️ Upload Coverage Artifact (Jest)
       uses: actions/upload-artifact@v4
