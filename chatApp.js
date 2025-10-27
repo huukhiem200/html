@@ -32,7 +32,7 @@ function render() {
   // Kiểm tra xem người dùng đang gõ **hoặc** box đang rỗng
   if ((keyword.length > 0 && !isTyping) || messages.length === 0) {
     // Luôn hiển thị SuggestionList nếu người dùng đang gõ hoặc box rỗng
-    const suggestions = findTopFaqs(keyword, allFaqs);
+    const suggestions = findTopFylls(keyword, allFaqs);
     displayArea.innerHTML = SuggestionList(suggestions, keyword);
     attachSuggestionListeners();
   } else {
