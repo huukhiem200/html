@@ -29,12 +29,11 @@ jobs:
           ${{ runner.os }}-node-
 
     - name: 📦 Install Dependencies
-      # Sử dụng cờ --legacy-peer-deps nếu npm install gặp vấn đề với Jest, hoặc --force để buộc cài đặt lại
       run: npm install --force 
 
-    - name: 🔐 Fix Permissions for Jest Binary
-      # Sửa: Đảm bảo Jest và các binaries khác có quyền thực thi (executable)
-      run: chmod +x node_modules/.bin/jest
+    - name: 🔐 Fix Permissions for Binaries
+      # Sửa: Đảm bảo TẤT CẢ các binaries (eslint, jest) đều có quyền thực thi
+      run: chmod +x ./node_modules/.bin/*
       
     - name: 🧹 Run Lint Check
       # Check code style and common errors
