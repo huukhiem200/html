@@ -5,11 +5,11 @@
  */
 export function SearchResults(faqs) {
   if (!faqs || faqs.length === 0) {
-    // Sửa: Dùng single quote và 2 khoảng trắng
+    // Sửa: Dùng single quote
     return '<div class="search-results__initial">Vui lòng nhập từ khóa để tìm kiếm...</div>';
   }
 
-  // Sửa: Thêm dấu ngoặc đơn quanh (faq) và dùng 2 khoảng trắng
+  // Sửa: Thêm dấu ngoặc đơn quanh (faq)
   return faqs.map((faq) => `
     <details class="faq-item" data-question="${faq.question}">
       <summary class="faq-item__question">❓ ${faq.question}</summary>
@@ -17,3 +17,4 @@ export function SearchResults(faqs) {
     </details>
   `).join('');
 }
+// Xóa dòng trống cuối file

@@ -21,3 +21,4 @@ export function SuggestionList(suggestions, keyword) {
     </div>
   `;
 }
+// Xóa dòng trống cuối file

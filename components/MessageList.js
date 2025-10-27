@@ -3,9 +3,11 @@ export function MessageList(messages) {
     // Trả về rỗng để SuggestionList xử lý
     return '';
   }
+  // Sửa: Thêm dấu ngoặc đơn quanh (msg)
   return messages.map((msg) => `
     <div class="message message--${msg.sender}">
       ${msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
     </div>
   `).join('');
 }
+// Xóa dòng trống cuối file

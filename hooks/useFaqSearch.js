@@ -1,3 +1,4 @@
+//javascript:useFaqSearch.js:./hooks/useFaqSearch.js
 // hooks/useFaqSearch.js
 export function findTopFaqs(keyword, allFaqs) {
   if (!keyword || !allFaqs) return [];
@@ -18,5 +19,4 @@ export function findTopFaqs(keyword, allFaqs) {
   // Sửa: Thêm dấu ngoặc đơn quanh (a, b) và (faq)
   return scoredFaqs.filter((faq) => faq.score > 0).sort((a, b) => b.score - a.score).slice(0, 3);
 }
-// Sửa: Thêm dòng trống cuối file
-
+// Xóa dòng trống cuối file

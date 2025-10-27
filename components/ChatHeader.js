@@ -1,4 +1,3 @@
-// components/ChatHeader.js
 export function ChatHeader() {
   return `
     <div class="chat-header">
@@ -8,3 +7,4 @@ export function ChatHeader() {
     </div>
   `;
 }
+// Xóa dòng trống cuối file
