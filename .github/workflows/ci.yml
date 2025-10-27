@@ -18,11 +18,15 @@ jobs:
         volumes: # Mount code vào /app trong service
           - ${{ github.workspace }}:/app
         
-        # SỬA LỖI: Chỉ dùng tùy chọn --entrypoint và lệnh trong options
+        # SỬA LỖI: Loại bỏ comment khỏi chuỗi lệnh trong options
         options: >-
           --workdir /app
           --entrypoint /bin/sh 
-          -c "npm ci && npm start" # Lệnh chạy BÊN TRONG service
+          -c "npm ci && npm start" 
+          --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - name: ⬇️ Checkout Repository Code
