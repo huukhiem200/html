@@ -273,7 +273,7 @@ function render() {
     attachSuggestionListeners();
   } else {
     displayArea.innerHTML = MessageList(messages);
-    displayArea.scrollTop = displayArea.scrollHeight;
+    displayArea.scrollTop = messageListContainer.scrollHeight;
   }
 }
 
@@ -308,4 +308,4 @@ async function main() {
 }
 
 document.addEventListener('DOMContentLoaded', main);
-// Thêm dòng trống cuối file
+// Sửa: Thêm dòng trống cuối file
