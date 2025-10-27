@@ -23,10 +23,10 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # SỬA LỖI: working_directory, entrypoint, command phải ở cấp này
-        working_directory: /app # Đặt thư mục làm việc BÊN TRONG service
-        entrypoint: /bin/sh # Ghi đè entrypoint để chạy shell command
-        command: -c "npm ci && npm start" # Lệnh chạy BÊN TRONG service: Cài đặt rồi khởi động
+        # SỬA LỖI: Đảm bảo các khóa này thụt lề đúng, ngang hàng với 'image', 'ports', 'volumes', 'options'
+        working_directory: /app
+        entrypoint: /bin/sh
+        command: -c "npm ci && npm start"
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -62,7 +62,6 @@ jobs:
       run: npm install -g newman
 
     - name: 🚦 Run API Tests (Newman)
-      # Newman sẽ chạy test với service 'web' (đã qua health check) đang chạy trên localhost:3000
       run: newman run UniFAQ.postman_collection.json --reporters cli
 
     # --- Kết thúc các bước kiểm thử API ---

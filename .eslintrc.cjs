@@ -10,7 +10,7 @@ module.exports = {
     es2021: true,
     jest: true, // Thêm môi trường Jest cho các file test
   }, 
-  // SỬA LỖI: 'extends' PHẢI NẰM NGOÀI 'env', ngang hàng với 'env'
+  // Sử dụng cấu hình tiêu chuẩn của Airbnb và Jest
   extends: [
     'eslint:recommended',
     'airbnb-base',
@@ -52,6 +52,6 @@ module.exports = {
       ignoreStrings: true,
       ignoreUrls: true,
     }],
-  },
+  } // <-- SỬA LỖI: Thêm dấu } bị thiếu ở đây
 };
 // Đã thêm newline ở cuối file

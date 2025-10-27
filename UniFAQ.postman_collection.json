@@ -63,6 +63,43 @@
 		},
 		{
 			"name": "localhost:3000",
+			"event": [ 
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Mã trạng thái là 200 OK\r",
+							"pm.test(\"Status code is 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Thời gian phản hồi chấp nhận được (ví dụ: dưới 800ms)\r",
+							"pm.test(\"Response time is less than 800ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+							"});\r",
+							"\r",
+							"// Test 3: Header Content-Type là HTML\r",
+							"pm.test(\"Content-Type header is text/html\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/html\");\r",
+							"});\r",
+							"\r",
+							"// Test 4: Body chứa thẻ HTML\r",
+							"pm.test(\"Response body includes <html> tag\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"<html>\");\r",
+							"});\r",
+							"\r",
+							"// Test 5: Body chứa div container chat chính\r",
+							"pm.test(\"Response body includes chat container div\", function () {\r",
+							"    // Điều chỉnh class/id nếu cần\r",
+							"    pm.expect(pm.response.text()).to.include('<div class=\"chat-widget\" id=\"chat-container\">'); \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
