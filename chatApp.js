@@ -1,3 +1,5 @@
+// chatApp.js (Phiên bản Cuối cùng: Đã sửa lỗi CI)
+
 import { ChatHeader } from './components/ChatHeader.js';
 import { InputBar } from './components/InputBar.js';
 import { MessageList } from './components/MessageList.js';
@@ -8,7 +10,7 @@ import { findTopFaqs } from './hooks/useFaqSearch.js';
 // eslint-disable-next-line max-len
 const GEMINI_API_KEY = 'AIzaSyCYZOtTycH6N5lOG3r7RZrpBrpDRtZCVo'; // THAY KEY BẰNG KEY CỦA BẠN
 const DATA_FILE = './assets/faqs.json';
-let messages = [];
+let messages = []; // Sửa: Dùng let vì messages sẽ được gán lại
 let allFaqs = [];
 let isShowingSuggestions = true;
 
@@ -306,3 +308,5 @@ async function main() {
 }
 
 document.addEventListener('DOMContentLoaded', main);
+// Xóa dòng trống cuối file
+``

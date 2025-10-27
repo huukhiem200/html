@@ -1,4 +1,3 @@
-//javascript:useFaqSearch.js:./hooks/useFaqSearch.js
 // hooks/useFaqSearch.js
 export function findTopFaqs(keyword, allFaqs) {
   if (!keyword || !allFaqs) return [];

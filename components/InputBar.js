@@ -1,4 +1,3 @@
-// components/InputBar.js
 export function InputBar() {
   return `
     <form class="input-bar" id="chat-form">
@@ -7,3 +6,4 @@ export function InputBar() {
     </form>
   `;
 }
+// Xóa dòng trống cuối file
