@@ -17,4 +17,4 @@ export function SearchResults(faqs) {
     </details>
   `).join('');
 }
-// Đã thêm newline
+// Đã thêm newline ở cuối file
