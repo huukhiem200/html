@@ -11,27 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     services: # Cấu hình service để chạy server nền
-      web:
-        image: node:20-alpine # Sử dụng image node cơ bản
-        ports: # Map cổng 3000 của service ra host
-          - 3000:3000
-        volumes: # Mount code vào /app trong service
-          - ${{ github.workspace }}:/app
-        working_directory: /app # Đặt thư mục làm việc BÊN TRONG service
-        
-        # SỬA LỖI: Sử dụng entrypoint và command ở cấp độ đúng, dùng cú pháp mảng
-        entrypoint: ["/bin/sh", "-c"]
-        command: ["npm ci && npm start"] # Lệnh chạy BÊN TRONG service
-
-        # Options chỉ còn lại health check
-        options: >-
-          --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
+      web: # Cấp độ 0 (so với services)
+        image: node:20-alpine     # Cấp độ 1 (thụt vào 2 dấu cách)
+        ports:                    # Cấp độ 1
+          - 3000:3000             # Cấp độ 2
+        volumes:                  # Cấp độ 1
+          - ${{ github.workspace }}:/app # Cấp độ 2
+        working_directory: /app   # CẤP ĐỘ 1 - NGANG HÀNG IMAGE, PORTS, VOLUMES, OPTIONS
+        entrypoint: ["/bin/sh", "-c"] # CẤP ĐỘ 1 - NGANG HÀNG IMAGE, PORTS, VOLUMES, OPTIONS
+        command: ["npm ci && npm start"] # CẤP ĐỘ 1 - NGANG HÀNG IMAGE, PORTS, VOLUMES, OPTIONS
+        options: >-               # Cấp độ 1
+          --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\"" # Cấp độ 2 (trong options)
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
-    steps:
-    - name: ⬇️ Checkout Repository Code
+    steps: # Cấp độ 0 (so với jobs)
+    - name: ⬇️ Checkout Repository Code # Cấp độ 1 (thụt vào 2 dấu cách)
       uses: actions/checkout@v4
 
     - name: 🛠️ Setup Node.js 20
