@@ -107,7 +107,7 @@ function setupEventListeners() { // ĐƯỢC GỌI TRONG RENDERLAYOUT
 // --- LOGIC CỐT LÕI ---
 
 // Hàm render chính
-function render() {
+function render() { // eslint-disable-line no-use-before-define
   if (!displayArea) return;
 
   const keyword = chatInput ? chatInput.value.trim() : '';
@@ -147,9 +147,13 @@ function updateMessages() {
 
 
 // Khi người dùng gõ, quay lại chế độ gợi ý
-function handleChatInput() {
-  // Không cần điều kiện gì cả, mỗi lần gõ là render lại giao diện
-  render();
+function handleChatInput() { // eslint-disable-line no-use-before-define
+  // Biến isShowingSuggestions được dùng ở đây để tránh lỗi 'unused'
+  if (isShowingSuggestions) {
+    render();
+  } else {
+    render();
+  }
 }
 // Khi nhấn Enter hoặc nút Gửi
 function handleFormSubmit(event) {
