@@ -10,23 +10,23 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
 
-    services: # Cấu hình service để chạy server nền
+    services: # Configure the background service for the web server
       web:
-        image: node:20-alpine # Sử dụng image node cơ bản
-        ports: # Map cổng 3000 của service ra host
+        image: node:20-alpine # Base Node image
+        ports: # Map port 3000
           - 3000:3000
-        volumes: # Mount code vào /app trong service
+        volumes: # Mount current code into /app
           - ${{ github.workspace }}:/app
-        # Options bao gồm health check để chờ server
+        # Options for the service container, including health check
         options: >-
           --health-cmd "node -e \"require('http').request({ host: 'localhost', port: 3000, path: '/health' }, res => process.exit(res.statusCode === 200 ? 0 : 1)).end()\""
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # SỬA LỖI: Đảm bảo các khóa này thụt lề đúng, ngang hàng với 'image', 'ports', 'volumes', 'options'
-        working_directory: /app
-        entrypoint: /bin/sh
-        command: -c "npm ci && npm start"
+        # CORRECT INDENTATION: These must be at the same level as 'image', 'ports', 'volumes', 'options'
+        working_directory: /app # Set working directory INSIDE the service
+        entrypoint: /bin/sh # Override entrypoint for shell command
+        command: -c "npm ci && npm start" # Command to run INSIDE the service: install then start
 
     steps:
     - name: ⬇️ Checkout Repository Code
@@ -45,10 +45,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - name: 📦 Install Dependencies (for runner linters/tools if needed)
+    - name: 📦 Install Dependencies (for runner)
       run: npm ci
 
-    - name: 🔐 Fix Permissions for Binaries (if needed by runner tools)
+    - name: 🔐 Fix Permissions for Binaries (for runner)
       run: chmod +x ./node_modules/.bin/*
 
     - name: 🧹 Run Lint Check
@@ -57,14 +57,15 @@ jobs:
     - name: 🧪 Run Unit Tests (Jest)
       run: npm run test:ci
 
-    # --- Các bước kiểm thử API ---
+    # --- API Testing Steps ---
     - name: 🌐 Install Newman
       run: npm install -g newman
 
     - name: 🚦 Run API Tests (Newman)
+      # Newman tests run against the 'web' service on localhost:3000
       run: newman run UniFAQ.postman_collection.json --reporters cli
 
-    # --- Kết thúc các bước kiểm thử API ---
+    # --- End API Testing Steps ---
 
     - name: ⬆️ Upload Coverage Artifact (Jest)
       uses: actions/upload-artifact@v4
