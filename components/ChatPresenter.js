@@ -21,9 +21,7 @@ export class ChatPresenter {
     this.minimizeButton = null;
   }
 
-  /**
-   * 1. Tiêm HTML ban đầu và Query các phần tử con
-   */
+
   renderLayout() {
     if (!this.chatContainer) return;
     try {
