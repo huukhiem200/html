@@ -9,7 +9,7 @@ module.exports = {
     node: true,
     es2021: true,
     jest: true, // Thêm môi trường Jest cho các file test
-  }, 
+  },
   // Sử dụng cấu hình tiêu chuẩn của Airbnb và Jest
   extends: [
     'eslint:recommended',
@@ -25,11 +25,11 @@ module.exports = {
   ],
   rules: {
     // Tắt quy tắc này để cho phép cả LF (Linux/Mac) và CRLF (Windows)
-    'linebreak-style': 'off', 
+    'linebreak-style': 'off',
     // Cho phép console.log và console.error trong môi trường phát triển
     'no-console': 'off',
     // TẮT: Giải quyết lỗi 'Imported file extensions' cho các file .js trong import.
-    'import/extensions': 'off', 
+    'import/extensions': 'off',
     // Cho phép sử dụng các biến như 'messages', 'allFaqs' chưa được định nghĩa
     'no-unused-vars': ['error', { argsIgnorePattern: '^_|faq|keyword|allFaqs|messages' }],
     // Cho phép sử dụng cú pháp function declaration thay vì arrow function
@@ -45,13 +45,12 @@ module.exports = {
     // Tắt lỗi yêu cầu định nghĩa hàm trước khi sử dụng
     'no-use-before-define': 'off',
     // Bắt buộc phải có khoảng trắng trước '}'
-    'object-curly-spacing': ['error', 'always'], 
+    'object-curly-spacing': ['error', 'always'],
     // Cho phép các dòng có tối đa 120 ký tự
     'max-len': ['error', {
       code: 120,
       ignoreStrings: true,
       ignoreUrls: true,
     }],
-  } // <-- SỬA LỖI: Thêm dấu } bị thiếu ở đây
+  }, // Dấu } này là của 'rules'
 };
-// Đã thêm newline ở cuối file
