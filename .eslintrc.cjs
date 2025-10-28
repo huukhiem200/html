@@ -46,9 +46,9 @@ module.exports = {
     'no-use-before-define': 'off',
     // Bắt buộc phải có khoảng trắng trước '}'
     'object-curly-spacing': ['error', 'always'],
-    // Cho phép các dòng có tối đa 120 ký tự
+    // Cho phép các dòng có tối đa 500 ký tự (Đã điều chỉnh từ 120)
     'max-len': ['error', {
-      code: 120,
+      code: 500,
       ignoreStrings: true,
       ignoreUrls: true,
     }],

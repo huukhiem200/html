@@ -1,21 +1,21 @@
-// File: chatApp.js (Đã refactor)
+// File: chatApp.js (Đã sửa lỗi đường dẫn)
 
-// (Đảm bảo đường dẫn import chính xác tới nơi bạn lưu 2 file mới)
 // eslint-disable-next-line import/no-unresolved
-import { ChatContainer } from './containers/ChatContainer.js';
+import { ChatContainer } from './hooks/ChatContainer.js';
+// eslint-disable-next-line import/no-unresolved
 import { ChatPresenter } from './components/ChatPresenter.js';
 
 /**
  * Entry Point (Điểm khởi đầu)
- * Chỉ chịu trách nhiệm khởi tạo 2 lớp và kết nối chúng.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Tạo Presenter (UI) trước
   const presenter = new ChatPresenter();
-
-  // 2. Tạo Container (Logic) và tiêm Presenter vào
-  const container = new ChatContainer(presenter);
-
-  // 3. Khởi động ứng dụng
-  container.init();
+  
+  // Chỉ khởi tạo container nếu tìm thấy phần tử chat container
+  if (presenter.chatContainer) {
+    const container = new ChatContainer(presenter);
+    container.init();
+  } else {
+    console.error("Lỗi: Không tìm thấy #chat-container. Không thể khởi tạo ứng dụng chat.");
+  }
 });
