@@ -1,7 +1,7 @@
 // File: hooks/ChatContainer.js (Đã sửa lỗi this.sleep)
 
 // Sửa lỗi ESLint: import/no-useless-path-segments
-import { findTopFaqs } from './useFaqSearch.js';
+import { findTopFaqs } from '../hooks/useFaqSearch.js';
 
 /**
  * HÀM HỖ TRỢ: Giả lập độ trễ (Sleep) - ĐÃ ĐƯỢC TÁCH KHỎI CLASS
@@ -12,7 +12,7 @@ const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 /**
  * ChatContainer (Lớp Logic: Xử lý State và Dữ liệu)
  */
-export class ChatContainer {
+export class ChatService { // 🚨 ĐÃ ĐỔI TÊN LỚP
   constructor(presenter) {
     this.presenter = presenter;
     this.GEMINI_API_KEY = 'AIzaSyCYZOtTycH6N5lOG63r7RZrpBrpDRtZCVo';
