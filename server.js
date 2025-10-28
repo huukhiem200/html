@@ -109,11 +109,11 @@ app.delete('/faqs/:id', (req, res) => {
 
 // 🩵 HEALTH CHECK
 app.get('/health', (req, res) => {
-  res.set('Cache-Control', 'no-store');
-  // 💡 SỬA LỖI 2: Thêm 'return' ở đây
+  // 👇 SỬA DÒNG NÀY (để khớp với test)
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.type('text/plain');
   return res.status(200).send('OK');
 });
-
 // 🏠 TRANG CHÍNH HTML
 app.use(express.static(__dirname));
 app.get('/', (req, res) => {

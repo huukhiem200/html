@@ -10,11 +10,6 @@
     "answer": "Sinh viên thuộc khóa K2022 cần hoàn thành tối thiểu **130 tín chỉ** (bao gồm 10 tín chỉ tự chọn). Vui lòng tham khảo 'Quy chế Tốt nghiệp' V.3."
   },
   {
-    "id": 3,
-    "question": "Quy trình xin nghỉ học tạm thời (bảo lưu) như thế nào?",
-    "answer": "Nộp đơn (theo mẫu) và các minh chứng cần thiết tại Văn phòng Khoa, sau đó Phòng Công tác Sinh viên sẽ phê duyệt. Hạn chót nộp đơn là 3 tuần trước khi học kỳ mới bắt đầu."
-  },
-  {
     "id": 4,
     "question": "Phí gửi xe hàng tháng tại ký túc xá là bao nhiêu?",
     "answer": "Phí gửi xe máy hàng tháng là **50.000 VNĐ**. Sinh viên cần đăng ký tại văn phòng Ban quản lý Ký túc xá trước ngày 5 hàng tháng."
@@ -181,6 +176,11 @@
   },
   {
     "id": 37,
+    "question": "API Test Question",
+    "answer": "This FAQ was created via Postman test."
+  },
+  {
+    "id": 38,
     "question": "API Test Question",
     "answer": "This FAQ was created via Postman test."
   }
