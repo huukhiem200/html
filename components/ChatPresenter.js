@@ -136,7 +136,7 @@ export class ChatPresenter {
       this.chatInput.focus();
     }
   }
-  
+
   toggleChatWindow(isOpen) {
     if (this.chatContainer) {
       this.chatContainer.classList.toggle('is-open', isOpen);
@@ -176,4 +176,5 @@ export class ChatPresenter {
       }
     });
   }
+  README.md
 }
