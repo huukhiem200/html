@@ -1,21 +1,20 @@
-// File: chatApp.js (Đã sửa lỗi đường dẫn)
+// File: chatApp.js
 
 // eslint-disable-next-line import/no-unresolved
-import { ChatContainer } from './hooks/ChatContainer.js';
+import { ChatService } from './services/ChatService.js';
 // eslint-disable-next-line import/no-unresolved
 import { ChatPresenter } from './components/ChatPresenter.js';
-
 /**
- * Entry Point (Điểm khởi đầu)
+ * Entry Point (Lớp UI)
  */
 document.addEventListener('DOMContentLoaded', () => {
   const presenter = new ChatPresenter();
-  
-  // Chỉ khởi tạo container nếu tìm thấy phần tử chat container
-  if (presenter.chatContainer) {
-    const container = new ChatContainer(presenter);
-    container.init();
+  // 🚨 Sửa lỗi 13:1 (Trailing spaces)
+  if (presenter.chatContainer) { // <-- Đảm bảo không có khoảng trắng sau dòng này
+    const service = new ChatService(presenter);
+    service.init();
   } else {
-    console.error("Lỗi: Không tìm thấy #chat-container. Không thể khởi tạo ứng dụng chat.");
-  }
+    // 🚨 Sửa lỗi 18:19 (Quotes)
+    console.error('Lỗi: Không tìm thấy #chat-container. Không thể khởi tạo ứng dụng chat.');
+  } // <-- Lỗi 20:4 sẽ được sửa khi bạn thêm dòng trống
 });
