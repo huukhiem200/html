@@ -1,7 +1,7 @@
 // File: chatApp.js
 
 // eslint-disable-next-line import/no-unresolved
-import { ChatService } from './services/ChatService.js'; // 🚨 SỬ DỤNG CHATSERVICE
+import { ChatService } from './services/ChatService.js';
 // eslint-disable-next-line import/no-unresolved
 import { ChatPresenter } from './components/ChatPresenter.js';
 
@@ -11,10 +11,13 @@ import { ChatPresenter } from './components/ChatPresenter.js';
 document.addEventListener('DOMContentLoaded', () => {
   const presenter = new ChatPresenter();
   
-  if (presenter.chatContainer) {
-    const service = new ChatService(presenter); // 🚨 KHỞI TẠO SERVICE
+  // 🚨 Sửa lỗi 13:1 (Trailing spaces)
+  if (presenter.chatContainer) { // <-- Đảm bảo không có khoảng trắng sau dòng này
+    const service = new ChatService(presenter);
     service.init();
   } else {
-    console.error("Lỗi: Không tìm thấy #chat-container. Không thể khởi tạo ứng dụng chat.");
-  }
+    // 🚨 Sửa lỗi 18:19 (Quotes)
+    console.error('Lỗi: Không tìm thấy #chat-container. Không thể khởi tạo ứng dụng chat.');
+  } // <-- Lỗi 20:4 sẽ được sửa khi bạn thêm dòng trống
 });
+// 🚨 Dòng này phải là dòng trống cuối cùng (sau khi nhấn Enter)
