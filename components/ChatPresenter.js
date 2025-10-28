@@ -8,11 +8,11 @@ import { SuggestionList } from './SuggestionList.js';
 export class ChatPresenter {
   constructor() {
     this.chatContainer = document.getElementById('chat-container');
-    this.toggleButton = document.getElementById('chat-toggle-button'); 
+    this.toggleButton = document.getElementById('chat-toggle-button');
     this.headerSearchForm = document.getElementById('header-search-form');
     this.headerSearchInput = document.getElementById('header-search-input');
     this.suggestionChips = document.querySelectorAll('.suggestion-chip');
-    
+
     this.displayArea = null;
     this.chatInput = null;
     this.chatForm = null;
@@ -27,15 +27,15 @@ export class ChatPresenter {
   renderLayout() {
     if (!this.chatContainer) return;
     try {
-        // Render nội dung HTML từ các component
-        this.chatContainer.innerHTML = `
+      // Render nội dung HTML từ các component
+      this.chatContainer.innerHTML = `
           ${ChatHeader()}
           <div class="message-list" id="display-area"></div>
           ${InputBar()}
-        `; 
+        `;
     } catch (e) {
-        console.error("LỖI CÚ PHÁP COMPONENT KHI RENDER HTML (FATAL):", e);
-        return; 
+      console.error('LỖI CÚ PHÁP COMPONENT KHI RENDER HTML (FATAL):', e);
+      return;
     }
 
     // 🚨 QUAN TRỌNG: Query các phần tử con sau khi chúng được tạo
@@ -45,9 +45,9 @@ export class ChatPresenter {
     this.submitBtn = document.getElementById('chat-submit');
     this.closeButton = document.getElementById('chat-close-button');
     this.minimizeButton = document.getElementById('chat-minimize-button');
-    
+
     if (!this.toggleButton) {
-        console.error("LỖI KHỞI TẠO: Không tìm thấy #chat-toggle-button.");
+      console.error('LỖI KHỞI TẠO: Không tìm thấy #chat-toggle-button.');
     }
   }
 
@@ -57,16 +57,16 @@ export class ChatPresenter {
   bindEvents(handlers) {
     if (this.toggleButton) {
       this.toggleButton.addEventListener('click', handlers.onToggleChat);
-      console.log("✅ Sự kiện bật/tắt chính đã được gắn.");
+      console.log('✅ Sự kiện bật/tắt chính đã được gắn.');
     }
-    
+
     if (this.closeButton) {
       this.closeButton.addEventListener('click', handlers.onCloseChat);
     }
     if (this.minimizeButton) {
       this.minimizeButton.addEventListener('click', handlers.onCloseChat);
     }
-    
+
     if (this.headerSearchForm) {
       this.headerSearchForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -97,7 +97,7 @@ export class ChatPresenter {
         }
       });
     }
-    
+
     if (this.chatInput) {
       this.chatInput.addEventListener('input', () => {
         handlers.onChatInput(this.chatInput.value);
@@ -115,13 +115,14 @@ export class ChatPresenter {
     if (!this.displayArea) return;
     this.displayArea.innerHTML = SuggestionList(suggestions, keyword);
     this.attachSuggestionListeners();
-  } 
+  }
 
   displayMessages(messages) {
     if (!this.displayArea) return;
     this.displayArea.innerHTML = MessageList(messages);
     this.scrollToBottom();
-  } 
+  }
+
   setUIBusy(isBusy) {
     // Kiểm tra xem các phần tử input có tồn tại không
     if (this.chatInput) {
@@ -142,9 +143,9 @@ export class ChatPresenter {
       this.chatContainer.classList.toggle('is-open', isOpen);
     }
   }
-  
-  //--- HÀM UTILITY ---
-  
+
+  // --- HÀM UTILITY ---
+
   resetChatUI() {
     if (this.chatInput) {
       this.chatInput.value = '';
@@ -153,13 +154,13 @@ export class ChatPresenter {
       this.displayArea.innerHTML = '';
     }
   }
-  
+
   scrollToBottom() {
     if (this.displayArea) {
       this.displayArea.scrollTop = this.displayArea.scrollHeight;
     }
   }
-  
+
   attachSuggestionListeners() {
     const items = this.displayArea.querySelectorAll('.suggestion-item');
     items.forEach((item) => {

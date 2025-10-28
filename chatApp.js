@@ -10,12 +10,12 @@ import { ChatPresenter } from './components/ChatPresenter.js';
  */
 document.addEventListener('DOMContentLoaded', () => {
   const presenter = new ChatPresenter();
-  
+
   // Chỉ khởi tạo container nếu tìm thấy phần tử chat container
   if (presenter.chatContainer) {
     const container = new ChatContainer(presenter);
     container.init();
   } else {
-    console.error("Lỗi: Không tìm thấy #chat-container. Không thể khởi tạo ứng dụng chat.");
+    console.error('Lỗi: Không tìm thấy #chat-container. Không thể khởi tạo ứng dụng chat.');
   }
 });

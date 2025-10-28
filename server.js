@@ -118,7 +118,7 @@ app.get('/health', (req, res) => {
 app.use(express.static(__dirname));
 app.use('/hooks', express.static(path.join(__dirname, 'hooks')));
 // 👇 THÊM DÒNG NÀY ĐỂ PHỤC VỤ CÁC TỆP TRONG THƯ MỤC 'components'
-app.use('/components', express.static(path.join(__dirname, 'components')))
+app.use('/components', express.static(path.join(__dirname, 'components')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index4.html'));
 });
